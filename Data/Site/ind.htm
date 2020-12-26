@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script>
+     var y = false;
+     if (this !== top) {
+         var x = null;
+         for (var p = parent; !('id' in p.document.body && p.document.body.id === 'ID_indTopFr' && (x = p)) && parent !== top; p = p.parent);
+         if (!x) x = top; else y = true;
+         x.location.href = "/";
+     }
+     if (!y) location.href = "/";
+     </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+5
+001000
+007000
+001001
+005000
+002000
+004000
+
+
+1e getal aantal categoriën, de rest het aantal per categorie

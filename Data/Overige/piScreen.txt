@@ -1,0 +1,49 @@
+005
+003
+004
+003
+105
+AA
+06
+305
+402
+103
+403
+501
+GG
+dvb:000
+Nederland 1
+dvb:001
+Nederland 2
+dvb:002
+Nederland 3
+dvb:003
+RTL 4
+dvb:004
+RTL 5
+dvb:005
+SBS 6
+dvb:006
+RTL 7
+dvb:007
+RTL 8
+dvb:008
+Net 5
+dvb:009
+Veronica
+dvb:010
+National Geografic
+http://highvolume03.streampartner.nl:1935/vleugels_hd4/livestream/.m3u8
+Xite
+NOS00
+NOS Journaal
+NOS01
+NOS 20:00 Journaal
+NOS02
+Nieuwsuur
+http://ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/journaal24/journaal24.isml/journaal24.m3u8
+Journaal 24
+http://ipv4.api.nos.nl/resolve.php/livestream?url=/live/npo/thematv/politiek24/politiek24.isml/politiek24.m3u8
+Politiek 24
+Y/Video/Speel.M3U
+Speellijst

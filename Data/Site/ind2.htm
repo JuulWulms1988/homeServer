@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    html, body {
+        cursor: default;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin: 0px;
+        padding: 0px;
+        font-size: 1em !important;
+        color: #000 !important;
+        font-family: Arial !important;
+    }
+    .container {
+        position: fixed;
+        top: 0%;
+        right: 0%;
+        bottom: 0%;
+        left: 0%;
+        -ms-user-select: none;
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+    }
+    .back {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .divin {
+        margin: 6px;
+        width: 250px;
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 0px 0px 13px 13px;
+        background-color: rgba(170, 255, 0, .5);
+        border-collapse: collapse;
+        border: 1px solid rgba(80, 0, 0, .75);
+        text-align: left;
+    }
+    .divbuit {
+        box-shadow: 0 0 30px rgba(0,0,0,.9);
+        -moz-box-shadow: 0 0 30px rgba(0,0,0,.9);
+        -webkit-box-shadow: 0 0 30px rgba(0,0,0,.9);
+        border-radius: 0px 0px 20px 20px;
+        background-clip: padding-box;
+        display: inline-block;
+        margin: 4px;
+        padding: 0px;
+        color: rgb(60, 0, 0);
+        border: 1px solid rgba(25, 25, 255, 1);
+        background-color: rgba(255, 0, 0, .5);
+    }
+    .divhead {
+        background-clip: padding-box;
+        margin: 0px;
+        padding: 6px;
+        padding-bottom: 0px;
+        font-weight: bold;
+        text-align: center;
+    }
+    table, tr, td {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        border-collapse: collapse;
+        border: 0px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .actieFr {
+        font-size: 12px !important;
+        color: darkred !important;
+        overflow-y: hidden;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 70px;
+        border-collapse: collapse;
+        border: 0px black solid;
+        height: 28px;
+        margin: 0px;
+        margin-top: 52px;
+        margin-left: -117px;
+        text-align: center;
+        vertical-align: top;
+        padding: 0px;
+        overflow: hidden;
+        margin-bottom: 4px;
+    }
+    form {
+        margin: 0px;
+        padding: 0px;
+    }
+    #txtlinks {
+        text-align: left;
+    }
+    .idinput {
+        width: 240px; 
+        padding: 4px;
+        margin: 0px;
+        margin-top: 2px;
+        border-radius: 5px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(60, 60, 0, .5);
+        background-color: rgba(0, 180, 255, .3);
+        color: rgb(0, 42, 60);
+    }
+    .idinput:hover {
+        background-color: rgba(0, 127, 180, .5);
+    }
+    .divbut {
+        font-size: 13px;
+        display: inline-block;
+        border-radius: 5px;
+        background-clip: padding-box;
+        padding: 4px;
+        margin: 0px;
+        border: 1px solid rgba(100, 255, 100, .5);
+        background-color: rgba(0, 255, 0, .3);
+    }
+    .divbut:hover {
+        background-color: rgba(100, 255, 100, .5);
+        margin: 0px;
+        border: 1px solid rgba(100, 255, 100, .5);
+        padding: 3px;
+        padding-top: 5px;
+        padding-left: 5px;
+        }
+    .divbutNH {
+        font-size: 13px;
+        display: inline-block;
+        border-radius: 5px;
+        background-clip: padding-box;
+        padding: 4px;
+        margin: 0px;
+        border: 1px solid rgba(100, 255, 100, .5);
+        background-color: rgba(0, 255, 0, .3);
+    }
+    .spinp {
+        margin: 0px;
+        padding: 0px;
+        font-size: 14px;
+        font-weight: bold;
+        color: rgba(30, 30, 0, 1);
+    }
+    h1 {
+        margin: 0px;
+        padding: 0px;
+        font-size: 1.25em !important;
+        color: #000 !important;
+        font-family: Arial !important;
+    }
+</style>
+<script>
+    var blockVar;
+    function blockF(x) {
+        if (x) (blockVar = document.createElement('div')).classList.add('container'), document.body.appendChild(blockVar);
+        else document.body.removeChild(blockVar), blockVar = '';
+    }
+    var lgUsrId = "";
+    var anim = {
+        buf: {},
+        wait: false,
+        fade: function (inOut, el, t_end, func) {
+            var t; t_end *= 20;
+            if (inOut && el[0].style.opacity > 0) t = mathO.floor(el[0].style.opacity * t_end);
+            else if (!inOut && el[0].style.opacity < 1) t = mathO.floor((1 - el[0].style.opacity) * t_end);
+            else t = 0; var tim = setInterval(function () { if (t < t_end) t++; if (t < t_end) if (inOut) for (var TEO = 0; TEO < el.length; TEO++) el[TEO].style.opacity = t / t_end; else for (var TEO = 0; TEO < el.length; TEO++) el[TEO].style.opacity = 1 - t / t_end; else { for (var TEO = 0; TEO < el.length; TEO++) el[TEO].style.opacity = inOut * 1; clearInterval(tim); func(); } }, 50); return tim;
+        },
+        addCorner: function (acut, el, func, t_end, func_end) {
+            var offset = [0, 0]; var acc = mathO.acc(50, t_end *= 20);
+            var elN = el.cloneNode(); elN.removeAttribute("id"); elN.style.position = "absolute";
+            var ba = ['left', 'right', 'top', 'bottom'];
+            var bb = ['height', 'width'];
+
+            //offset functies
+            function offF(X) { return el['offset' + mathO.hfdLttrSt(true, bb[X])]; };
+            function heightWidth(X) { for (var tT = 0; tT < 2; tT++) X.style[bb[tT]] = offset[tT].toString() + "px"; };
+            function vergOff() { var V = [offF(0), offF(1)]; if (offset[0] === V[0] && offset[1] === V[1]) return false; for (var HH = 0; HH < 2; HH++) offset[HH] = V[HH]; return true;}
+
+            //zet backdif (op spfac)
+            var spfac = el.cloneNode(); spfac.removeAttribute("id"); spfac.style.position = "relative";
+            for (var t = 0; t < 4; t++) spfac.style[ba[t]] = "auto"; for (var t = 0; t < 2; t++) offset[t] = offF(t); heightWidth(spfac); func(spfac); 
+
+            //zet splitsdiv
+            var divNode = []; var backNode = []; for (var t = 0; t < 4; t++) {
+
+                var p = el.cloneNode(); p.removeAttribute("id");
+                p.style.width = "50%"; p.style.height = "50%";
+                var p2; if (t === 3) p2 = spfac; else p2 = spfac.cloneNode();
+                if (t > 1) { p.style.top = "100%"; p2.style.bottom = "100%"; }
+                else p.style.top = "-50%";
+                if (t % 2) { p.style.left = "100%"; p2.style.right = "100%"; }
+                else p.style.left = "-50%";
+                p.appendChild(p2); elN.appendChild(p);
+                divNode.push(p); backNode.push(p2);
+            }
+            spfac = 2;
+            el.appendChild(elN); if (acut) { func(el); func_end(); };
+            var t = 0;
+            var tim = setInterval(function () {
+                if (vergOff()) for (var TTT = 0; TTT < 4; TTT++) heightWidth(backNode[TTT]); var delT = t_end - t++; var reken = 50 - (mathO.floor(acc * delT * delT / .02) / 100);
+                ba = ["top", "left"];
+                if (t < t_end)
+                    for (var tel = 0; tel < 4; tel++)
+                        for (var tal = 0; tal < 2; tal++)
+                            if ((!tal && tel > 1) || (tal && tel % 2)) divNode[tel].style[ba[tal]] = (100 - reken).toString() + "%";
+                            else divNode[tel].style[ba[tal]] = "-" + (50 - reken).toString() + "%";
+                else {
+                    clearInterval(tim);
+                    for (var tel = 0; tel < 4; tel++)
+                        for (var tal = 0; tal < 2; tal++)
+                            if ((!tal && tel > 1) || (tal && tel % 2)) divNode[tel].style[ba[tal]] = "50%";
+                            else divNode[tel].style[ba[tal]] = "0%";
+                    if (!acut) func(el);
+                    el.removeChild(elN);
+                    if (!acut) func_end();
+                }
+            }, 50); return tim;
+        }
+    };
+    function adBack() {
+        return document.getElementById('back0').cloneNode();
+    };
+    function openpr() {
+        var backimg = document.createElement("img");
+        backimg.onload = function () {
+            function x() {
+                var subT_end = 20; var subT = 0; var subAcc = mathO.acc(18.5, subT_end / 2);
+                var subEl = document.getElementById("divIn");
+                var subButVal = setInterval(function () {
+                    if (++subT < subT_end / 2) {
+                        subEl.style.paddingBottom = mathO.sT(subAcc, subT).toString() + "px";
+                    }
+                    else if (subT < subT_end) {
+                        subEl.style.paddingBottom = (18.5 + (18.5 - mathO.sT(subAcc, subT_end - subT))).toString() + "px";
+                    }
+                    else { clearInterval(subButVal); subEl.style.paddingBottom = "37px"; anim.fade(true, [document.getElementById('submitBut')], .5, function () { anim.wait = false; var YY = document.getElementById('submitBut'); YY.classList.add('divbut'); YY.classList.remove('divbutNH'); }) }
+                }, 50);
+                anim.addCorner(true, document.getElementById('back0'), function (X) { X.style.backgroundImage = "url(\'" + backimg.src + "\')"; }, 5, function () { sendvr = false; });
+            };
+
+            if ('timOpn' in anim.buf) {
+                var interOpn = setInterval(function () { if (!('timOpn' in anim.buf)) { clearInterval(interOpn); x(); } }, 50);
+            }
+            else x();
+        };
+        backimg.src = "back.jpg";
+
+
+        anim.buf.timOpn = setTimeout(function () { anim.fade(anim.wait = true, [document.getElementById('logPage')], 1, function () { }); delete anim.buf.timOpn; }, 250);
+    };
+    function mainPage(x) {
+        if (x) {
+            blockF(true);
+            anim.wait = true;
+            var pMainP = document.getElementById('MainPageDiv');
+            newHtml('MainPageDiv', "<iframe id=\"MainPageFr\" onload=\"mainLoaded()\" style=\"border: none; position: fixed; top: -2000px; left: -2000px; right: -2000px; bottom: -2000px; height: 100%; width: 100%;\" src=\"id=" + lgUsrId + "@main.htm\"></iframe>");
+            anim.fade(false, [document.getElementById('logPage'), document.getElementById('submitBut')], 1, function () {
+                var pDivIn = document.getElementById('divIn');
+                //vars en attach
+                newHtml('divHead', 'Mededeling');
+                document.getElementById('lgUsrInp').value = ''; document.getElementById('lgPswInp').value = '';
+                anim.buf.buflog = pDivIn.removeChild(document.getElementById('formLog')); pDivIn.style.paddingBottom = "12px";
+                var waitNode = document.createElement("div"); pDivIn.style.width = "auto";
+                waitNode.classList.add("form"); waitNode.innerHTML = 'Een ogenblik geduld aub';
+                pDivIn.appendChild(waitNode);
+                
+                //wachtscherm
+                anim.buf.wachtIn = anim.fade(true, [document.getElementById('logPage')], 1, function () {
+                    delete anim.buf.wachtIn;
+                }); anim.wait = false;
+                
+                //document.getElementById('logPage').style.display = 'none';
+
+            });
+        } else { newHtml('MainPageDiv', '<div class=\"actieFr\" id=\"lgActFr\"> </div>'); document.getElementById('LogPage').style.display = 'block'; anim.fade(anim.wait = true, [document.getElementById('logPage')], 1, function () { anim.wait = (sendvr = false); }); }
+    };
+    function mainLoaded() {
+
+       var el = document.getElementById('MainPageFr');
+        var b = ['top', 'bottom', 'left', 'right'];
+        for (var t = 0; t < 4; t++) el.style[b[t]] = "0px";
+        if (!anim.wait) mainLoaded2();
+        else {
+            var x = setInterval(function () { if (!anim.wait) { clearInterval(x); mainLoaded2(); } }, 50);
+        }
+
+    };
+    function mainLoaded2() {
+        if ("wachtIn" in anim.buf) { clearInterval(anim.buf.wachtIn); delete anim.buf.wachtIn; };
+        
+        anim.fade(false, [document.getElementById('logPage')], 1, function () {
+
+            var pDivIn = document.getElementById('divIn');
+            pDivIn.removeChild(pDivIn.children[0]); newHtml('divHead', 'Aanmelden'); pDivIn.style.paddingBottom = "37px"; pDivIn.appendChild(anim.buf.buflog); delete anim.buf.buflog;
+            document.getElementById('logPage').style.display = "none"; anim.buf.readyMain = true;
+        }); 
+    };
+    function newHtml(id, txt) { var elm = document.getElementById(id); if ('HTMLContent' in elm) elm.HTMLContent = txt; else elm.innerHTML = txt; }
+    function logFunc(x) {
+        
+        switch (x) {
+            case 0:
+                sendvr = false;
+                newHtml('lgActFr', 'Gebruiker<br>onbekend');
+                break;
+            case 1:
+                sendvr = false;
+                newHtml('lgActFr', 'Wachtwoord<br>onjuist');
+                break;
+            case 2:
+                newHtml('lgActFr', '');
+                mainPage(true);
+                break;
+        }
+    }
+    var sendvr = true;
+    function passF() {
+        if (!sendvr && !anim.wait && document.getElementById('lgUsrInp').value.length && document.getElementById('lgPswInp').value.length) {
+            sendvr = true;
+          //  mainPage(true);
+            document.forms[0].submit();
+        }
+    }
+    var mathO = {
+        floor: function (x) { if (x < 0) if ((x = (-x) - (-x) % 1) > 0) return -x; else return 0; return x - x % 1; },
+        hfdLttrSt: function (x, y) {
+            var z = [65, 97];
+            if (y.charCodeAt(0) < (z[x * 1]) || y.charCodeAt(0) >= z[x * 1] + 26) return y;
+            var q = String.fromCharCode(y.charCodeAt(0) - z[x * 1] + z[!x * 1]);
+            for (var t = 1; t < y.length; t++) q += y.charAt(t); return q;
+        },
+        acc: function (s, t) { return s / (t * t / 2); },
+        sT: function (acc, arg) { return this.floor(acc * arg * arg / .002) / 1000; }
+    }
+</script>
+</head>
+<body>
+<iframe class="container" name="indUpFr"></iframe>
+<div style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgb(60,60,60); background-size: cover; background-repeat: no-repeat; background-position: 50% 50%; overflow: hidden;" id="back0">
+</div><br>
+    <table class="container" id="logPage" style="opacity: 0;">
+        <tr>
+            <td>
+                <div class="divbuit" id="divBuit">
+                    <div class="divhead" id="divHead">Aanmelden</div>
+                    <div class="divin" id="divIn" style="padding-bottom: 0px;">
+                        <form action="lgFr.htm" target="indUpFr" id="formLog">
+                            <span class="spinp">Gebruikersnaam</span><table>
+                                <tr><td id="txtlinks"><input type="text" class="idinput" id="lgUsrInp" placeholder="Gebruikersnaam invoeren" name="usr" maxlength="30" required></td></tr>
+                            </table><span class="spinp">Wachtwoord</span>
+                            <table>
+                                <tr>
+                                    <td id="txtlinks">
+                                        <input type="password" class="idinput" id="lgPswInp" style="display: block;" placeholder="Wachtwoord invoeren" name="psw" maxlength="30" required>
+                                        <div class="divbutNH" id="submitBut" style="opacity: 0; position: absolute; left: 50%; transform: translateX(-50%);" onclick="passF()"><span style="color: rgb(0, 60, 0);">Aanmelden</span></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table><br>
+<div id="MainPageDiv"><div class="actieFr" id="lgActFr"> </div></div>
+    <script>
+        document.body.id = 'ID_indTopFr';
+      openpr();
+    </script>
+</body>
+</html>

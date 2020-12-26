@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var point_topF = parent.document.body;
+        var web = {
+            v: function v(x, y) {
+                var e2;
+                for (var t = 0; t < 2; t++) {
+                    var eO = document.createElement('input');
+                    eO.setAttribute('onchange', 'web.actie.algCat(' + function () { if (!t) return 'true'; else return 'false'; }() + ', ' + y.toString() + ', this)');
+                    for (var a = [['type', 'radio'], ['name', Math.floor(y / 100).toString() + (Math.floor(y / 10) % 10).toString() + (y % 10).toString()], ['value', ((t + 1) % 2).toString()]], MMM = a.length, TTT = 0, B; TTT < MMM; TTT++)
+                        B = a[TTT], eO.setAttribute(B[0], B[1]);
+                    if ((!t && x) || (!x && t)) eO.checked = true;
+                    if (!t) e2 = eO; else return [e2, eO];
+                }
+            },
+            vD: function (x, y) {
+                function cvN100(X) {
+                    var uit; if (X) uit = 1; else uit = 0; while (uit < 100 && X >= Math.floor((uit + 1) / 100 * 255)) uit++; return uit;
+                }
+                function cvV100(X) {
+                    return Math.floor(X / 100 * 255);
+                }
+                function cv16(XX) {
+                    function Y(X) { return String.fromCharCode(function () { if (X > 9) return 97 + (X - 10); else return 48 + X; }()); }
+                    return Y(Math.floor(XX / 16)) + Y(XX % 16);
+                }
+                var el = document.createElement('select'); el.classList.add('formSelect');
+                el.setAttribute('onchange', 'web.actie.algCatD(this.value, ' + y.toString() + ', this)');
+                for (var t = 0; t < 101; t++) {
+                    var el2 = document.createElement('option');
+                    el2.value = cv16(cvV100(t));
+                    el2.text = t.toString();
+                    if (cvN100(x) === t) el2.selected = true;
+                    el.appendChild(el2);
+                } return el;
+            }, //x = nr; y = ldNr; z = vars
+            vSTR: function (type, SELNM, AR) {
+                function cvI (x) {
+                    return String.fromCharCode((function () { if (x < 10) return 48; else if (x < 36) return 55; else return 61; })() + x);
+                }
+                var el = document.createElement('select'); el.classList.add('formSelect');
+                {
+                    var yyy;
+                    el.setAttribute('onchange', yyy = 'web.actie.mainStr.func' + function () { if (type) return 'S'; return 'R'; }() +
+                    '(this.value, ' + function () { if (type) return 'function(AA) { return [AA[0], AA[1]]; } (vars.cat.streams[1][0]), '; return ''; }() + 'this)');
+                }
+                for (var tT = 0, tTm = AR.length; tT < tTm; tT++) {
+                    var el2 = el.appendChild(document.createElement('option'));
+                    el2.text = AR[tT];
+                    if (type && tT === 1) el2.value = 'z';
+                    else {
+                        var T = tT;
+                        if (type && T > 1) T--;
+                        if ((el2.value = cvI(T / 60) + cvI(T % 60)) === SELNM) el2.selected = true;
+                    }
+                }
+                if (type && SELNM === 'zz') {
+                    var el2 = el.appendChild(document.createElement('option'));
+                    el2.text = 'Specifiek', el2.value = 'zz', el2.selected = true;
+                } return el;
+            },
+            vLP: function (x, y, z) {
+                
+                
+                var uit = [];
+                
+                function noF(X) { return (Math.floor(X / 100)).toString() + (Math.floor(X / 10) % 10).toString() + (X % 10).toString(); }
+
+                
+                vars.cat.subNo['N' + noF(x)] = 'LP' + noF(y);
+                
+                function vFUNC(VALNO, SELNM, AR, ARG) {
+                    var el = document.createElement('select'); el.classList.add('formSelect');
+                    el.setAttribute('onchange', 'web.actie.ldPl.VarAc(this.value, ' + VALNO.toString() + ', ' + ARG + ', this)');
+                    for (var tT = 0, tTm = AR.length; tT < tTm; tT++) {
+                        var el2 = document.createElement('option');
+                        el2.value = AR[tT][0];
+                        el2.text = AR[tT][1];
+                        if (AR[tT][1] === SELNM) el2.selected = true;
+                        el.appendChild(el2);
+                    } return el;
+                }
+                function vFUNCBOX(VALNO, NOW, ARG) {
+                    var elm = document.createElement('input');
+                    elm.setAttribute('type', 'checkbox');
+                    elm.setAttribute('onchange', 'web.actie.ldPl.VarAc((this.checked * 1).toString(), ' + VALNO.toString() + ', ' + ARG + ', this)');
+                    elm.checked = NOW;
+                    return elm;
+                }
+                function cvN100(X) {
+                    var uioot; if (X) uioot = 1; else uioot = 0; while (uioot < 100 && X >= Math.floor((uioot + 1) / 100 * 255)) uioot++; return uioot;
+                }
+                function cvV100(X) {
+                    return Math.floor(X / 100 * 255);
+                }
+                function cvNTIJDARF(X) {
+                    if (X < 8) return Math.floor(X / 2) * 25 + X % 2 * 13;
+                    if (X < 37) return (X - 7) * 100;
+                    if (X < 41) return (X - 33) * 750;
+                    return (X - 40) * 6000;
+                }
+                function cvNTIJD(X) {
+                    var uioot; if (X) uioot = 13; else uioot = 0;
+                    {
+                        var TTTT = 0;
+                        while (uioot < 88 && X >= ++TTTT * 12.5) uioot = Math.floor(TTTT / 2) * 25 + TTTT % 2 * 13;
+                    }
+                    {
+                        var TTTT = 0;
+                        while (uioot < 3000 && X >= ++TTTT * 100) uioot = TTTT * 100;
+                    }
+                    {
+                        var TTTT = 4;
+                        while (uioot < 5250 && X >= ++TTTT * 750) uioot = TTTT * 750;
+                    }
+                    {
+                        var TTTT = 0;
+                        while (uioot < 60000 && X >= ++TTTT * 6000) uioot = TTTT * 6000;
+                    }
+                    return uioot;
+                }
+                function cvNTIJDT(X) {
+                    if (!X) return '-';
+                    return function () {
+                        if (X < 3000) return function () {
+                            if (X > 88) return (X / 100).toString();
+                            return ['⅛', '¼', '⅜', '½', '⅝', '¾', '⅞'][Math.floor(X / 12.5) - 1];
+                        }() + ' s';
+                        else return function () {
+                            if (X > 5250) return (X / 6000).toString();
+                            return ['⅛', '¼', '⅜', '½', '⅝', '¾', '⅞'][Math.floor(X / 750) - 1];
+                        }() + ' m';
+                    }();
+                }
+                function cvNClr(X) {
+                    if (X[0] === 255 && X[1] === 255 && X[2] === 255) return 0;
+                    for (var TtT = 0; TtT < 3; TtT++) if (X[TtT] === 255 && !X[(TtT + 1) % 3] && !X[(TtT + 2) % 3]) return 1 + TtT;
+                    for (var TtT = 0; TtT < 3; TtT++) if (!X[TtT] && X[(TtT + 1) % 3] === 255 && X[(TtT + 2) % 3] === 255) return 4 + TtT;
+                    for (var TtT = 0; TtT < 3; TtT++) if (X[TtT] === 255 && X[(TtT + 1) % 3] === 127 && X[(TtT + 2) % 3] === 127) return 7 + TtT;
+                    for (var TtT = 0; TtT < 3; TtT++) if (X[TtT] === 127 && X[(TtT + 1) % 3] === 255 && X[(TtT + 2) % 3] === 255) return 10 + TtT;
+                    var UYT = 13;
+                    for (var TtT = 0; TtT < 3; TtT++)
+                        if (X[TtT] === 127) {
+                            UYT += TtT * 2;
+                            for (var tTt = 0; tTt < 3; tTt++) {
+                                if (tTt === TtT) continue;
+                                if (X[tTt] === 255) UYT++;
+                                break;
+                            } break;
+                        } return UYT;
+                }
+                function cvVClr(X) {
+                    var UYT = [0, 0, 0];
+                    if (!X) return [255, 255, 255];
+                    else if (X < 4) {
+                        UYT[--X] = 255, UYT[(X + 1) % 3] = UYT[(X + 2) % 3] = 0;
+                        return UYT;
+                    }
+                    else if (X < 7) {
+                        UYT[X -= 4] = 0, UYT[(X + 1) % 3] = UYT[(X + 2) % 3] = 255;
+                        return UYT;
+                    }
+                    else if (X < 10) {
+                        UYT[X -= 7] = 255, UYT[(X + 1) % 3] = UYT[(X + 2) % 3] = 127;
+                        return UYT;
+                    }
+                    else if (X < 13) {
+                        UYT[X -= 10] = 127, UYT[(X + 1) % 3] = UYT[(X + 2) % 3] = 255;
+                        return UYT;
+                    }
+                    UYT[Math.floor((X -= 13) / 2)] = 127;
+                    for (var TtT = 0, AL = true; TtT < 3; TtT++)
+                        if (TtT === Math.floor(X / 2)) continue;
+                        else UYT[TtT] = ((X % 2) + ((AL = !AL) * 1)) % 2 * 255;
+                    return UYT;
+                }
+                function cvNClrS(X) {
+                    return 'rgba(' + X[0].toString() + ', ' + X[1].toString() + ', ' + X[2].toString() + ', 1)'; 
+                }
+                function cvVClrS(X) {
+                    var UYT = [255, 255, 255];
+                    for (var TtT = 0, BBB, BBB2, CNT = 0, DARG = 'rgba', TmT = X.length; TtT < TmT; TtT++)
+                        if ((BBB = X.charCodeAt(TtT)) === 32) continue;
+                        else if (CNT < 4) if (BBB !== (BBB2 = DARG.charCodeAt(CNT++)) && BBB !== BBB2 - 32) break; else continue;
+                        else if (CNT === 4) if (BBB !== 40) break; else { CNT++; continue; }
+                        else {
+                            function NRF(XXX) { if (BBB > 57 || BBB < 48) return false; return true; } if (!NRF(BBB)) break; var DEC = 1; for (var TYT = 0; TYT < 2; TYT++) if (TtT + 1 < TmT && NRF(X.charCodeAt(TtT + 1))) TtT++ , DEC++; else break;
+                            var UuU = 0; for (var sSs = 0; sSs < DEC; sSs++) UuU += (X.charCodeAt(TtT - (DEC - 1 - sSs)) - 48) * function () { var iIi = 1; for (var hHh = 0, mMm = DEC - 1 - sSs; hHh < mMm; hHh++) iIi *= 10; return iIi; }();
+                            UYT[CNT++ - 5] = UuU; if (CNT === 8) break; var EXTX = false; while (++TtT < TmT && (BBB = X.charCodeAt(TtT)) !== 44) if (BBB != 32) { EXTX = true; break; } if (EXTX) break;
+                        } return UYT;
+                }
+                
+                for (var t = 0, m = z.length, v; t < m && (v = z[t]); t++)
+                    uit.push({
+                        parChldAr: function () {
+                            var UIT = [];
+                            for (var T = 0, M = v[0].length; T < M; T++) {
+                                if (T === t) {
+                                    UIT.push(true); continue;
+                                }
+                                var elm = document.createElement('input');
+                                elm.setAttribute('type', 'checkbox');
+                                elm.setAttribute('onchange', 'web.actie.ldPl.parChldAF(this.checked, ' + y.toString() + ', ' + t.toString() + ', ' + T.toString() + ', this)');
+                                elm.checked = v[0][T];
+                                UIT.push(elm);
+                            } return UIT;
+                        }(),
+                        helder: vFUNC(0, cvN100(v[1]).toString(), function () { var uAr = []; for (var TyT = 0; TyT < 101; TyT++) uAr.push([cvV100(TyT), TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        rgbPauze: vFUNC(1, cvN100(v[2]).toString(), function () { var uAr = []; for (var TyT = 0; TyT < 101; TyT++) uAr.push([cvV100(TyT), TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        negDlay: vFUNCBOX(2, v[3], y.toString() + ', ' + t.toString()),
+                        gamDlay: vFUNC(3, cvNTIJDT(cvNTIJD(v[4])), function () { var uAr = []; for (var TyT = 0, bhj; TyT < 51; TyT++) uAr.push([bhj = cvNTIJDARF(TyT), cvNTIJDT(bhj)]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        negGamDlay: vFUNCBOX(4, v[5], y.toString() + ', ' + t.toString()),
+                        gamPer: vFUNC(5, cvNTIJDT(cvNTIJD(v[6])), function () { var uAr = []; for (var TyT = 0, bhj; TyT < 51; TyT++) uAr.push([bhj = cvNTIJDARF(TyT), cvNTIJDT(bhj)]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        gamClr: function () { var el = document.createElement('div'); el.setAttribute('class', 'inFrame clrSelectIn'); el.style.backgroundColor = cvNClrS(cvVClr(v[7])); return [el, el.style]; }(),
+                        gamVal: vFUNC(7, cvN100(v[8]).toString(), function () { var uAr = []; for (var TyT = 0; TyT < 101; TyT++) uAr.push([cvV100(TyT), TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        gamIval: vFUNC(8, cvN100(v[9]).toString(), function () { var uAr = []; for (var TyT = 0; TyT < 101; TyT++) uAr.push([cvV100(TyT), TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        gamiHel: vFUNC(9, cvN100(v[10]).toString(), function () { var uAr = []; for (var TyT = 0; TyT < 101; TyT++) uAr.push([cvV100(TyT), TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        helDlay: vFUNC(10, cvNTIJDT(cvNTIJD(v[11])), function () { var uAr = []; for (var TyT = 0, bhj; TyT < 51; TyT++) uAr.push([bhj = cvNTIJDARF(TyT), cvNTIJDT(bhj)]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        negHelCur: vFUNCBOX(11, v[12], y.toString() + ', ' + t.toString()),
+                        gamPauze: vFUNC(12, cvN100(v[13]).toString(), function () { var uAr = []; for (var TyT = 0; TyT < 101; TyT++) uAr.push([cvV100(TyT), TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        helAmp: vFUNC(13, cvN100(v[14]).toString(), function () { var uAr = []; for (var TyT = 0; TyT < 101; TyT++) uAr.push([cvV100(TyT), TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        dlay: vFUNC(20, cvNTIJDT(cvNTIJD(v[15])), function () { var uAr = []; for (var TyT = 0, bhj; TyT < 51; TyT++) uAr.push([bhj = cvNTIJDARF(TyT), cvNTIJDT(bhj)]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        gamInterval: vFUNC(21, v[16].toString(), function () { var uAr = []; for (var TyT = 0; TyT < 21; TyT++) uAr.push([TyT, TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        helPer: vFUNC(22, cvNTIJDT(cvNTIJD(v[17])), function () { var uAr = []; for (var TyT = 0, bhj; TyT < 51; TyT++) uAr.push([bhj = cvNTIJDARF(TyT), cvNTIJDT(bhj)]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        per: vFUNC(23, cvNTIJDT(cvNTIJD(v[18])), function () { var uAr = []; for (var TyT = 0, bhj; TyT < 51; TyT++) uAr.push([bhj = cvNTIJDARF(TyT), cvNTIJDT(bhj)]); return uAr; }(), y.toString() + ', ' + t.toString()),
+                        randVar: vFUNC(40, v[19].toString(), function () { var uAr = []; for (var TyT = 0; TyT < 3; TyT++) uAr.push([TyT, TyT.toString()]); return uAr; }(), y.toString() + ', ' + t.toString())
+                    });
+                if (!('ffBufDel0' in vars)) vars.ffBufDel0 = [cvNTIJDARF, cvNTIJD, cvNTIJDT, cvNClr, cvVClr, cvNClrS, cvVClrS];
+                    return uit;
+            },
+            vT: function (x) { return document.createTextNode(x.toString()); }
+        }
+        var vars = {
+            cat: {
+                subNo: {},
+                naam: [['Alle', 'Algemeen'/*@?@?01*/]],
+                varNm: [/*@?@?02*/],
+                varDimNm: [/*@?@?04*/],
+                varOverig: [[], [], [], [], [], []],
+                varTmpNm: [/*@?@?06*/],
+                varPop: []
+            },
+            availClick: false,
+            loadMain: false,
+            loadMainCnt: 13,
+            loadMainF: function () {
+                var ff = --vars.loadMainCnt;
+                if (!ff) web.anim.waitFOb(parent.anim.buf, 'readyMain', function () { web.opnF(); });
+                else if (ff < 12) {
+                    var nieuw = document.createElement('script');
+                    nieuw.onload = vars.loadMainF; document.head.appendChild(nieuw);
+                    nieuw.src = 'main' + ['STR', 'DB', 'LPlA', 'A', 'B', 'W2', 'W', 'UB', '0', 'SB', 'LPl'][ff - 1] + '.js';
+                } 
+                else {
+                    var nieuw = document.createElement('link');
+                    for (var t = 0, a = [['rel', 'stylesheet'], ['type', 'text/css']], m = a.length, p; t < m; t++) nieuw.setAttribute((p = a[t])[0], p[1]);
+                    nieuw.onload = vars.loadMainF; document.head.appendChild(nieuw);
+                    nieuw.setAttribute('href', 'main' + ['0'][ff - 12] + '.css');
+                }
+            },
+            upBarV: [0, 0]
+        }
+        for (var t = 0, p = vars.cat.varDimNm, m = p.length; t < m; t++)
+            for (var T = 0, w = false, P = p[t], M = P.length; (T < M) || (!w && (w = true) && (T = 1)); T += 2)
+                if (T + 2 < M) P[T][1].classList.add('divTRaE');
+        vars.cat.ledPlf = [/*@?@?07*/];
+        vars.cat.streams = [/*@?@?08*/];
+    </script>
+    <link rel="stylesheet" type="text/css" href="main.css" onload="vars.loadMainF()">
+</head>
+<body>
+</body>
+
+</html>

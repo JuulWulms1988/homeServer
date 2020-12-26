@@ -1,0 +1,418 @@
+html {
+    white-space: nowrap;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+    border-collapse: collapse;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    font-family: Arial !important;
+    overflow: hidden;
+}
+
+.formSelect {
+    border-radius: 5px;
+    font-size: 13px;
+    padding: 4px;
+    margin: 0px;
+    border: 1px solid rgba(0, 80, 80, .5);
+    color: rgb(0, 60, 60);
+    background-color: rgba(0, 255, 255, .3);
+}
+
+    .formSelect:hover {
+        background-color: rgba(0, 180, 180, .5);
+    }
+
+body {
+    border-collapse: collapse;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.divBut {
+    font-size: 13px;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 5px;
+    background-clip: padding-box;
+    padding: 4px;
+    margin: 0px;
+}
+
+    .divBut:hover {
+        padding: 3px;
+        padding-top: 5px;
+        padding-left: 5px;
+    }
+
+.ButGr {
+    border: 1px solid rgba(100, 255, 100, .5);
+    color: rgb(0, 60, 0);
+    background-color: rgba(0, 255, 0, .3);
+}
+
+    .ButGr:hover {
+        background-color: rgba(100, 255, 100, .5);
+    }
+
+.ButRd {
+    border: 1px solid rgba(255, 100, 100, .5);
+    color: rgb(60, 0, 0);
+    background-color: rgba(255, 0, 0, .3);
+}
+
+    .ButRd:hover {
+        background-color: rgba(255, 100, 100, .5);
+    }
+
+.ButBl {
+    border: 1px solid rgba(110, 110, 255, .5);
+    color: rgb(1, 1, 60);
+    background-color: rgba(5, 5, 255, .3);
+}
+
+    .ButBl:hover {
+        background-color: rgba(110, 110, 255, .5);
+    }
+
+.ButRz {
+    border: 1px solid rgba(255, 177, 209, .5);
+    color: rgb(60, 30, 42);
+    background-color: rgba(255, 127, 180, .3);
+}
+
+    .ButRz:hover {
+        background-color: rgba(255, 177, 209, .5);
+    }
+
+.aFrame {
+    position: fixed;
+    width: 5px;
+    left: -100px;
+}
+.container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    margin: 0px;
+    padding: 0px;
+    border-collapse: collapse;
+}
+
+.contT1 {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.contT {
+    display: table-cell;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.contT2 {
+    display: table;
+    height: 100%;
+}
+
+.contT3 {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.windowdiv {
+    white-space: nowrap;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0,0,0,.9);
+    -moz-box-shadow: 0 0 30px rgba(0,0,0,.9);
+    -webkit-box-shadow: 0 0 30px rgba(0,0,0,.9);
+    border-radius: 0px 0px 20px 20px;
+    background-clip: padding-box;
+    display: inline-block;
+    vertical-align: top;
+    margin: 12px;
+    padding: 0px;
+    color: rgba(60, 0, 0, 1);
+    border: 1px solid rgba(25, 25, 255, 1);
+    background-color: rgba(255, 0, 0, .5);
+}
+
+.windowdiv0 {
+    background-clip: padding-box;
+    margin: 0px;
+    padding: 6px;
+    white-space: pre;
+    padding-bottom: 0px;
+    font-weight: bold;
+    text-align: center;
+}
+.h {
+    margin: 0px;
+    padding: 0px;
+    padding-bottom: 2px;
+    font-weight: bold;
+}
+.p {
+    margin: 0px;
+    padding: 0px;
+    padding-left: 16px;
+}
+.p2 {
+    padding-bottom: 7px;
+}
+.windowdiv1 {
+    margin: 6px;
+    padding: 12px;
+    font-size: 14px;
+    white-space: pre;
+    border-radius: 0px 0px 13px 13px;
+    background-color: rgba(170, 255, 0, .5);
+    border-collapse: collapse;
+    border: 1px solid rgba(80, 0, 0, .75);
+    text-align: left;
+}
+
+.barbut {
+    background-clip: padding-box;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 6px;
+    padding: 8px;
+}
+
+    .barbut:hover {
+        background-color: rgba(255, 255, 255, .4);
+        box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+        -moz-box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+        -webkit-box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+    }
+
+.barbut0 {
+    background-color: rgba(255, 255, 255, .4);
+    box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+    -moz-box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+    -webkit-box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+}
+
+.mainpagediv {
+    overflow: auto;
+    position: fixed;
+    white-space: normal;
+    top: 0px;
+    right: 200px;
+    bottom: 200px;
+    left: 0px;
+    margin: 0px;
+    padding: 12px;
+    padding-top: 131px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.sidebardiv {
+    overflow: auto;
+    position: fixed;
+    white-space: normal;
+    top: 119px;
+    right: 0px;
+    bottom: 0px;
+    width: 200px;
+    margin: 0px;
+    padding: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.downbardiv {
+    position: fixed;
+    white-space: normal;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    height: 200px;
+    margin: 0px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.upbardiv {
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    box-shadow: 0 0 30px rgba(0,0,0,.9);
+    -moz-box-shadow: 0 0 30px rgba(0,0,0,.9);
+    -webkit-box-shadow: 0 0 30px rgba(0,0,0,.9);
+    margin: 0px;
+    top: 0px;
+    color: rgba(195, 195, 255, 1);
+    height: 46px;
+    padding: 6px;
+    width: 100%;
+    border: none;
+    white-space: nowrap;
+    background-color: rgba(0, 0, 255, .5);
+    border-bottom: 1px solid rgba(75, 75, 255, 1);
+}
+table {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    border-collapse: collapse;
+    display: inline-block;
+    vertical-align: top;
+}
+.upbar0div {
+    position: fixed;
+    top: 59px;
+    left: 50%;
+    transform: translate(-50%);
+    box-shadow: 0 5px 30px -2px rgba(0,0,0,.9);
+    -moz-box-shadow: 0 5px 30px -2px rgba(0,0,0,.9);
+    -webkit-box-shadow: 0 5px 30px -2px rgba(0,0,0,.9);
+    background-clip: padding-box;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0px;
+    color: rgba(195, 255, 195, 1);
+    padding: 6px;
+    height: 46px;
+    border-radius: 0px 0px 21px 21px;
+    white-space: nowrap;
+    background-color: rgba(0, 255, 0, .5);
+    border-top: 0px;
+    border: 1px solid rgba(75, 255, 75, 1);
+}
+
+.inFrame {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-collapse: collapse;
+}
+
+.inFrBl {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-collapse: collapse;
+    display: block;
+}
+
+.fullHeight {
+    height: 100%;
+}
+
+.inFrIBl {
+    margin: 0px;
+    vertical-align: top;
+    padding: 0px;
+    border: none;
+    border-collapse: collapse;
+    display: inline-block;
+}
+.inFrIBlTT {
+    width: 40px;
+}
+
+.upB0IF {
+    height: 100%;
+    vertical-align: middle;
+}
+
+.barbut {
+    background-clip: padding-box;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 6px;
+    padding: 8px;
+}
+
+    .barbut:hover {
+        background-color: rgba(255, 255, 255, .4);
+        box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+        -moz-box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+        -webkit-box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+    }
+
+.barB0S {
+    background-clip: padding-box;
+    border-radius: 8px;
+    margin: 6px;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, .4);
+    box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+    -moz-box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+    -webkit-box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+}
+
+.bar0fs {
+    display: block;
+    overflow-x: hidden;
+    text-align: center;
+}
+
+form, input {
+    padding: 0px;
+    margin: 0px;
+}
+
+.divT {
+    margin: 0px;
+    padding: 0px;
+    display: table;
+    vertical-align: middle;
+    border: none;
+    border-collapse: collapse;
+}
+
+.divTR {
+    margin: 0px;
+    padding: 0px;
+    height: 16px;
+    vertical-align: middle;
+    display: table-row;
+}
+
+.divTRa {
+    height: 25px;
+}
+
+.divTRb {
+    height: 27px;
+}
+
+.divTRaE {
+    margin-bottom: 2px;
+}
+
+.divTD {
+    text-align: center;
+    white-space: pre;
+    vertical-align: middle;
+    margin: 0px;
+    padding: 0px;
+    display: table-cell;
+}
+
+.opaCls {
+    opacity: 0 !important;
+}

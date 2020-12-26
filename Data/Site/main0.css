@@ -1,0 +1,217 @@
+.tabTDiv {
+    white-space: pre;
+    margin: 0px;
+    border: none;
+    border-collapse: collapse;
+    display: block;
+    padding: 8px;
+}
+
+.tabTDivHl {
+    font-weight: bold;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    text-align: left;
+}
+.tabTDivH {
+    font-weight: bold;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 9px;
+    text-align: left;
+}
+.tabTDivNt {
+    text-align: right;
+    padding-top: 26px;
+    padding-right: 4px;
+    padding-left: 0px;
+    font-style: italic;
+}
+.tabTDivNo {
+    text-align: right;
+    padding-top: 9px;
+    padding-right: 4px;
+    padding-left: 0px;
+    font-style: italic;
+}
+.tabTDivMlt {
+    border-left: 2px blue solid;
+    text-align: left;
+    border-top: 2px blue solid;
+    border-radius: 8px 0px 0px;
+}
+
+.tabTDivMl {
+    text-align: center;
+    border-left: 2px blue solid;
+    border-top: 1px blue dotted;
+}
+.tabTDivMt {
+    border-top: 2px blue solid;
+    border-left: 1px blue dotted;
+    text-align: left;
+}
+.tabTDivM {
+    border-left: 1px blue dotted;
+    border-top: 1px blue dotted;
+    text-align: left;
+}
+.subNoDiv {
+    font-size: 8px;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 8px;
+    padding: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border: 1px solid rgba(110, 110, 255, .5);
+    margin: 0px;
+    background-clip: padding-box;
+    font-weight: bold;
+    color: rgb(1, 1, 60);
+    background-color: rgba(5, 5, 255, .3);
+}
+    .subNoDiv:hover {
+        padding: 0px;
+        padding-right: 1px;
+        padding-top: 2px;
+        padding-left: 3px;
+        background-color: rgba(110, 110, 255, .5);
+    }
+
+.clrSelect {
+    border-radius: 5px;
+    height: 21px;
+    vertical-align: top;
+    margin: 0px;
+    width: 38px;
+    padding: 2px;
+    font-size: 13px;
+    padding: 2px;
+    border: 1px solid rgba(0, 0, 80, .5);
+    color: rgb(0, 0, 60);
+    background-color: rgba(0, 0, 255, .3);
+}
+
+    .clrSelect:hover {
+        background-color: rgba(0, 0, 180, .5);
+    }
+.clrSelectIn {
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+}
+
+.clrSelectB {
+    margin: 2px;
+    vertical-align: top;
+    padding: 4px;
+    height: 50px;
+    width: 50px;
+    border: 1px solid rgba(0, 0, 80, .5);
+    border-collapse: collapse;
+    display: inline-block;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 255, .3);
+}
+
+.clrSelectNT {
+    margin-top: 0px;
+}
+
+.clrSelectNB {
+    margin-bottom: 0px;
+}
+
+.clrSelectNL {
+    margin-left: 0px;
+}
+
+.clrSelectNR {
+    margin-right: 0px;
+}
+
+    .clrSelectB:hover {
+        background-color: rgba(0, 0, 180, .5);
+    }
+
+.clrSelectB > div {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 4px;
+}
+
+.clrSelectBhov {
+    background-color: rgba(0, 0, 180, .5);
+}
+
+.tab26DH {
+    width: 100%;
+    display: table;
+}
+.tab26DR {
+    display: table-row;
+    text-align: left;
+   
+}
+.tab26DR0 {
+    display: table-row;
+    font-style: italic;
+    text-align: right;
+}
+.tab26DR1 {
+    display: table-row;
+    text-align: left;
+
+    border-top: 1px blue dotted;
+
+}
+
+.tab26DC {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 8px;
+    height: 27px;
+
+}
+
+.tab26DC0 {
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 4px;
+    height: 27px;
+    padding-top: 9px;
+    padding-bottom: 8px;
+}
+
+.tab26SUB1 {
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 8px;
+    font-weight: bold;
+}
+
+.tab26SUB0 {
+    height: 17px;
+}
+
+.tab26SUB2 {
+    text-align: left;
+    padding-left: 9px;
+    padding-right: 8px;
+    font-weight: bold;
+}
+
+.tab26HL1 {
+    border-left: 1px blue dotted;
+    border-top: 2px blue solid;
+}
+
+.tab26HL {
+    border-left: 2px blue solid;
+    border-top: 2px blue solid;
+    border-radius: 8px 0px 0px;
+}
