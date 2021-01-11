@@ -1,10 +1,10 @@
 #include "nSite.h"
 #include "ledPlaf.h"
 
-extern unsigned __int8* LEDPL_ADR;
+extern uint8_t* LEDPL_ADR;
 
 bool clsNSite::func::stwLdF(char* nGet, int nLen) {
-	unsigned __int8 ldNo = (*(nGet - 5) - '0') * 10 + (*(nGet - 4) - '0'), type;
+	uint8_t ldNo = (*(nGet - 5) - '0') * 10 + (*(nGet - 4) - '0'), type;
 	if ([&] { 
 		if (*(nGet - 3) == 'w' && *(nGet - 2) == 'z') {
 			
@@ -21,7 +21,7 @@ bool clsNSite::func::stwLdF(char* nGet, int nLen) {
 		if ((*(nGet - 3) == 'a' && *(nGet - 2) == 't' && (type = 1)) || (*(nGet - 3) == 'd' && *(nGet - 2) == 't' && (type = 2))) {
 			bool uit = true; 
 			char n = *nGet;
-			for (unsigned __int8 t = 0, m = 2 + (type % 2) * 2; t < m; n = nGet[++t])
+			for (uint8_t t = 0, m = 2 + (type % 2) * 2; t < m; n = nGet[++t])
 				if (!(n >= '0' && n <= '9')) return true;
 			return false;
 		}
@@ -33,9 +33,9 @@ bool clsNSite::func::stwLdF(char* nGet, int nLen) {
 	return true;
 }
 
-void clsNSite::func::stwLdwzF(unsigned __int8 type, unsigned __int8 ldNo, char* nGet, int nLen) {
+void clsNSite::func::stwLdwzF(uint8_t type, uint8_t ldNo, char* nGet, int nLen) {
 	char* xLs; mainThreadCls::clsExMes& pE = *threadCls->webLisHome.exMes;
-	__int8 xNow = pE.getStr(xLs); switch (type) {
+	int8_t xNow = pE.getStr(xLs); switch (type) {
 	case 0: *xLs = 'V'; break;
 	case 1: *xLs = 'A'; break;
 	case 2: *xLs = 'D'; break;

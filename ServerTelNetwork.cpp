@@ -1,11 +1,15 @@
-#include "StdAfx.h"
+#ifdef _WIN32
+#include "../stdafx.h"
+#endif
+
 #include "ServerTelNetwork.h"
-#include <IOStream>
+#include <iostream>
 
 
 ServerTelNetwork::ServerTelNetwork(void)
 {
-	// create WSADATA object
+	#ifdef _WIN32
+    // create WSADATA object
     WSADATA wsaData;
 
     // our sockets for the server
@@ -57,7 +61,7 @@ ServerTelNetwork::ServerTelNetwork(void)
 
     if (iResult == SOCKET_ERROR) {
         printf("ioctlsocket failed with error: %d\n", WSAGetLastError());
-        closesocket(ListenSocket);
+        _SOCK_CLOSE_F(ListenSocket);
         WSACleanup();
         exit(1);
     }
@@ -68,7 +72,7 @@ ServerTelNetwork::ServerTelNetwork(void)
     if (iResult == SOCKET_ERROR) {
         printf("bind failed with error: %d\n", WSAGetLastError());
         freeaddrinfo(result);
-        closesocket(ListenSocket);
+        _SOCK_CLOSE_F(ListenSocket);
         WSACleanup();
         exit(1);
     }
@@ -81,10 +85,28 @@ ServerTelNetwork::ServerTelNetwork(void)
 
     if (iResult == SOCKET_ERROR) {
         printf("listen failed with error: %d\n", WSAGetLastError());
-        closesocket(ListenSocket);
+        _SOCK_CLOSE_F(ListenSocket);
         WSACleanup();
         exit(1);
     }
+    #endif
+
+    #ifndef _WIN32
+    struct sockaddr_in hints;
+    memset(&hints, '\0', sizeof(struct sockaddr_in));
+    ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (ListenSocket < 0) exit(1);
+      int opt = 1;
+    if (setsockopt(ListenSocket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 
+    &opt, sizeof(opt))) exit(1);
+    hints.sin_family = AF_INET;
+    hints.sin_addr.s_addr = INADDR_ANY;
+    hints.sin_port = htons(10003);
+    if (bind(ListenSocket, (struct sockaddr *) &hints, sizeof(hints)) < 0) 
+        _SOCK_CLOSE_F(ListenSocket), exit(1);
+    if (listen(ListenSocket,128) < 0)
+        _SOCK_CLOSE_F(ListenSocket), exit(1);
+    #endif
 }
 
 
@@ -98,23 +120,17 @@ SOCKET ServerTelNetwork::acceptNewClient()
 	do {
 		// if client waiting, accept the connection and save the socket
 		ClientSocket = accept(ListenSocket, NULL, NULL);
-		if (ClientSocket == INVALID_SOCKET) continue;
-		char value = 1;
+		if (_SOCK_ENUM_COMP(ClientSocket, INVALID_SOCKET)) continue;
+		
+        #ifdef _WIN32
+        char value = 1;
       
 		setsockopt(ClientSocket, IPPROTO_TCP, TCP_NODELAY, &value, sizeof(value));
-       
+       #endif
 		return ClientSocket;
 	} while (true);
 }
 
-// receive incoming data
-int ServerTelNetwork::receiveData(unsigned int client_id, char * recvbuf)
-{
-  
-  
-
-    return 0;
-}
 
 // send data to all clients
 

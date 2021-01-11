@@ -9,41 +9,41 @@ clswbusr2::clswbusr2(void) {
 	mpusr.insert(pair<unsigned int, clswbusrlogstr*>(0, new clswbusrlogstr));
 	map<unsigned int, clswbusrlogstr*>::iterator itmpusr = mpusr.find(0);
 	if (itmpusr != mpusr.end()) {
-		itmpusr->second->usrlen = new unsigned __int8; *itmpusr->second->usrlen = 1;
-		itmpusr->second->usr = new char[2]; strncpy_s(itmpusr->second->usr, 2, "X", 1);
-		itmpusr->second->pswlen = new unsigned __int8; *itmpusr->second->pswlen = 1;
-		itmpusr->second->psw = new char[2]; strncpy_s(itmpusr->second->psw, 2, "X", 1);
+		itmpusr->second->usrlen = new uint8_t; *itmpusr->second->usrlen = 4;
+		itmpusr->second->usr = new char[5]; strncpy_s(itmpusr->second->usr, 5, "Juul", 4);
+		itmpusr->second->pswlen = new uint8_t; *itmpusr->second->pswlen = 4;
+		itmpusr->second->psw = new char[5]; strncpy_s(itmpusr->second->psw, 5, "8140", 4);
 	}
 	mpusr.insert(pair<unsigned int, clswbusrlogstr*>(1, new clswbusrlogstr)); itmpusr = mpusr.find(1);
 	if (itmpusr != mpusr.end()) {
-		itmpusr->second->usrlen = new unsigned __int8; *itmpusr->second->usrlen = 1;
-		itmpusr->second->usr = new char[2]; strncpy_s(itmpusr->second->usr, 2, "X", 1);
-		itmpusr->second->pswlen = new unsigned __int8; *itmpusr->second->pswlen = 1;
-		itmpusr->second->psw = new char[2]; strncpy_s(itmpusr->second->psw, 2, "X", 1);
+		itmpusr->second->usrlen = new uint8_t; *itmpusr->second->usrlen = 4;
+		itmpusr->second->usr = new char[5]; strncpy_s(itmpusr->second->usr, 5, "Kaas", 4);
+		itmpusr->second->pswlen = new uint8_t; *itmpusr->second->pswlen = 4;
+		itmpusr->second->psw = new char[5]; strncpy_s(itmpusr->second->psw, 5, "test", 4);
 	}
 }
 clswbusr2::~clswbusr2(void) {
 	map<unsigned int, clswbusrlogstr*>::iterator itmpusr = mpusr.find(0);
 	if (itmpusr != mpusr.end()) {
 		delete itmpusr->second->usrlen;
-		delete[2] itmpusr->second->usr;
+		delete[] itmpusr->second->usr;
 		delete itmpusr->second->pswlen;
-		delete[2]itmpusr->second->psw;
+		delete[]itmpusr->second->psw;
 	}
 	delete itmpusr->second;
 	itmpusr = mpusr.find(1);
 	if (itmpusr != mpusr.end()) {
 		delete itmpusr->second->usrlen;
-		delete[2] itmpusr->second->usr;
+		delete[] itmpusr->second->usr;
 		delete itmpusr->second->pswlen;
-		delete[2]itmpusr->second->psw;
+		delete[]itmpusr->second->psw;
 	}
 
 	delete itmpusr->second;
 	mpusr.erase(itmpusr);
 }
 
-void clswbusr2::mpupdate(unsigned __int8 minuut) {
+void clswbusr2::mpupdate(uint8_t minuut) {
 	mut.lock();
 	for (unsigned int t = 0, v, m = WEBUSR_CNT * 2; t < m; t++)
 		if (v = usrId.id[t / 2][t % 2])
@@ -52,7 +52,7 @@ void clswbusr2::mpupdate(unsigned __int8 minuut) {
 	mut.unlock();
 }
 
-bool clswbusr2::vergminuut(bool z, unsigned __int8 x, unsigned __int8 y) {
+bool clswbusr2::vergminuut(bool z, uint8_t x, uint8_t y) {
 	if (x > y) {
 		if (60 - x + y > 5 * (1 + (z * 1))) return true;
 	}
@@ -84,7 +84,7 @@ unsigned int clswbusr2::voegid(unsigned int usrno) {
 	}
 
 unsigned int clswbusr2::userIdStr::newIdF() {
-	unsigned int uit = 1; srand(time(NULL)); for (__int8 T = 0; T < 24; T++) uit += rand() % 32767; unsigned int ar[WEBUSR_CNT * 2], T = [&] {
+	unsigned int uit = 1; srand(time(NULL)); for (int8_t T = 0; T < 24; T++) uit += rand() % 32767; unsigned int ar[WEBUSR_CNT * 2], T = [&] {
 		for (int t = 0, m = WEBUSR_CNT * 2; t < m; t++) ar[t] = 0;
 		unsigned int niet, now = niet = 0, v, t;
 		for (int t2 = t = 0, m = WEBUSR_CNT * 2; t2 < m || ((ar[t++] = niet = now) && !(now = t2 = 0) && (t < m || !++t)); t2++)

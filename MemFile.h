@@ -1,6 +1,9 @@
 #pragma once
+#include <stdint.h>
 #include <iostream>
 #include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
 #include "Basproc.h"
 #include <map>
 
@@ -10,7 +13,7 @@ class memFileObj;
 
 class memFileCls {
 public:
-	memFileCls(char* path);
+	memFileCls(const char* path);
 private:
 	friend class memFileObj;
 	class Dir {
@@ -21,20 +24,20 @@ private:
 		map<unsigned int, char*> fl;
 		map<unsigned int, unsigned long> mLn;
 	private:
-		char* set(char* src, strbasprc* bas, unsigned long& lenG);
+		char* set(const char* src, strbasprc* bas, unsigned long& lenG);
+		char* setP(const char* src, strbasprc* bas, unsigned long& lenG);
 	};
-	bool open(char* path, char*& str, unsigned long& lLen, strbasprc& bas);
+	bool open(const char* path, char*& str, unsigned long& lLen, strbasprc& bas);
 	Dir* mainDir;
 };
 
 class  memFileObj {
 public:
-	memFileObj(char* path, memFileCls* str);
+	memFileObj(const char* path, memFileCls* str);
 	memFileObj(memFileCls* str);
 	memFileObj();
-	//memFileObj(char* path, memFileCls* str);
-	bool openStr(char* path, memFileCls* str);
-	bool open(char* path);
+	bool openStr(const char* path, memFileCls* str);
+	bool open(const char* path);
 	char get();
 	bool eof();
 	char* file;

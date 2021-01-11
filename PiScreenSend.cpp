@@ -1,6 +1,6 @@
 #include "PiScreen.h"
 
-void piScreenCls::screenObjS::send(unsigned __int16 s) {
+void piScreenCls::screenObjS::send(uint16_t s) {
 	sockConMut.lock_shared();
 	if (!connected) { sockConMut.unlock_shared(); return; }
 	SOCKET sSock = sock; 
@@ -9,7 +9,7 @@ void piScreenCls::screenObjS::send(unsigned __int16 s) {
 	if (s / 512) sluiting = true, strncpy_s(sBuf, 9, "sys OFF\n", sBufLen = 8);
 	else if (!(s / 256)) strncpy_s(sBuf, 9, "vlc OFF\n", sBufLen = 8);
 	else if (s % 256) { 
-		unsigned __int8 chanFFF;
+		uint8_t chanFFF;
 		strncpy_s(sBuf, 8, "vlc ON\n", sBufLen = 7);
 		if ([&] { piScreenC.chanSendMut.lock(); piScreenC.sourceMut.lock_shared(); chanFFF = piScreenC.channel; piScreenC.sourceMut.unlock_shared(); piScreenC.chanSendMut.unlock(); return piScreenC.chanBl; }())
 			sBuf[3] = chanFFF / 100 + '0', sBuf[4] = (chanFFF / 10) % 10 + '0', sBuf[5] = chanFFF % 10 + '0';
@@ -18,13 +18,13 @@ void piScreenCls::screenObjS::send(unsigned __int16 s) {
 		piScreenC.source, piScreenC.sourceLen), sBufLen = piScreenC.sourceLen + 5, piScreenC.sourceMut.unlock_shared(),
 		sBuf[sBufLen++] = '\"', sBuf[sBufLen++] = '\n';
 	bool uit = true; 
-	for (__int8 t = 0; t < 15 && (NetworkServices::sendMessage(sSock, sBuf, sBufLen) == SOCKET_ERROR || (uit = false)); t++);
+	for (int8_t t = 0; t < 15 && (_SOCK_ENUM_COMP(NetworkServices::sendMessage(sSock, sBuf, sBufLen), SOCKET_ERROR) || (uit = false)); t++);
 	if (!uit) 
 		if (sluiting) {
 			mainThreadCls::trLisHomeCls* x = threadCls->sesPoint(threadCls->sesPMut + adr, threadCls->adresNo(adr));
 			if (!x) return;
-			char* ls; __int8 lsNo = piScreenC.mpCh->get(ls);
-			unsigned __int8 hetNo = this - piScreenC.screenObj; 
+			char* ls; int8_t lsNo = piScreenC.mpCh->get(ls);
+			uint8_t hetNo = this - piScreenC.screenObj; 
 			strncpy_s(ls, 4, "@PS", 3);
 			ls[3] = adr / 10 + '0'; ls[4] = adr % 10 + '0';
 			ls[5] = 'C', ls[6] = 'U';
@@ -36,16 +36,16 @@ void piScreenCls::screenObjS::send(unsigned __int16 s) {
 		}
 		else return;
 	sockConMut.lock();
-	if (connected && sSock == sock) closesocket(sSock), connected = false;
+	if (connected && sSock == sock) _SOCK_CLOSE_F(sSock), connected = false;
 	sockConMut.unlock();
 }
 
 
 void piScreenCls::serverIO(bool s) {
-	unsigned __int8 ad = screenObj[0].adr;
+	uint8_t ad = screenObj[0].adr;
 	mainThreadCls::trLisHomeCls* x = threadCls->sesPoint(threadCls->sesPMut + ad, threadCls->adresNo(ad));
 	if (!x) return;
-	char* ls; __int8 lsNo = mpCh->get(ls);
+	char* ls; int8_t lsNo = mpCh->get(ls);
 	strncpy_s(ls, 4, "@PS", 3); ls[3] = ad / 10 + '0', ls[4] = ad % 10 + '0';
 	if (s) ls[5] = 'A', ls[6] = 'N';
 	else ls[5] = 'U', ls[6] = 'T';

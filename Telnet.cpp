@@ -9,20 +9,20 @@ void ServerTelnet::update()
 
 void telnetStr::chkAdVoeg(SOCKET S) {
 	chkAdMut.lock();
-	if (chkAdCnt < 256) chkAdAr[chkAdCnt++] = chkAdStr{ S, (unsigned __int8)((p_clstijd->minuut.load() + 1) % 60) };
-	else chkAdMp.insert(pair<SOCKET, unsigned __int8>(S, (p_clstijd->minuut.load() + 1) % 60));
+	if (chkAdCnt < 256) chkAdAr[chkAdCnt++] = chkAdStr{ S, (uint8_t)((p_clstijd->minuut.load() + 1) % 60) };
+	else chkAdMp.insert(pair<SOCKET, uint8_t>(S, (p_clstijd->minuut.load() + 1) % 60));
 	chkAdMut.unlock();
 }
 
-void telnetStr::rmAdArF(SOCKET S) { lock_guard<mutex> lk(chkAdMut); for (unsigned __int8 t = 0; t < chkAdCnt; t++) if (chkAdAr[t].s == S && rmAdAr(t)) return; if (chkAdMp.find(S) != chkAdMp.end()) chkAdMp.erase(S); }
+void telnetStr::rmAdArF(SOCKET S) { lock_guard<mutex> lk(chkAdMut); for (uint8_t t = 0; t < chkAdCnt; t++) if (chkAdAr[t].s == S && rmAdAr(t)) return; if (chkAdMp.find(S) != chkAdMp.end()) chkAdMp.erase(S); }
 
 bool ServerTelnet::receiveFromClients(SOCKET S)
 {
-	char rBuf[4]; unsigned __int8 rBufL = 0;
+	char rBuf[4]; uint8_t rBufL = 0;
 	do {
-		int r; unsigned __int8 t = 0;
+		int r; uint8_t t = 0;
 		while (true)
-			if ((r = NetworkServices::receiveMessage(S, rBuf + rBufL, 4 - rBufL)) <= 0 || !(rBufL += r))
+			if (_SOCK_RESULT_COMP((r = NetworkServices::receiveMessage(S, rBuf + rBufL, 4 - rBufL))) || !(rBufL += r))
 				if (t++ < 14) continue;
 				else return false;
 			else break;
@@ -32,26 +32,26 @@ bool ServerTelnet::receiveFromClients(SOCKET S)
 		bool f = false;
 		for (char t = 0, w; t < 2; t++) if (!(((w = rBuf[2 + t]) >= 'A' && w <= 'Z') || (w >= '0' && w <= '9') || (w >= 'a' && w <= 'x')) && (f = true)) break;
 		if (f) {
-			closesocket(S); return true;
+			_SOCK_CLOSE_F(S); return true;
 		}
 	}
 	switch (rBuf[0]) {
 	case 'P': switch (rBuf[1]) { case 'S': accept_piScreen(strbasprc::cvintcharint(rBuf[2]) * 60 + strbasprc::cvintcharint(rBuf[3]), S);  }
 	}
-	closesocket(S);
+	_SOCK_CLOSE_F(S);
 		return true;
 }
 
-void telnetStr::checkAdr(unsigned __int8 min) {
+void telnetStr::checkAdr(uint8_t min) {
 	if (!min) min = 59; else min--;
 	chkAdMut.lock();
-	unsigned __int8 w;
-	for (int t = 0; t < chkAdCnt; t++) if ((w = chkAdAr[t].min) <= min || w > min + 2) closesocket(chkAdAr[t].s), rmAdAr(t--);
+	uint8_t w;
+	for (int t = 0; t < chkAdCnt; t++) if ((w = chkAdAr[t].min) <= min || w > min + 2) _SOCK_CLOSE_F(chkAdAr[t].s), rmAdAr(t--);
 	bool del = false;
-	map<SOCKET, unsigned __int8>::iterator t, d;
+	map<SOCKET, uint8_t>::iterator t, d;
 	for (t = chkAdMp.begin(), d; t != chkAdMp.end(); t++) {
 		if (del) del = false, chkAdMp.erase(d);
-		if ((w = t->second) <= min || w > min + 2) del = true, d = t, closesocket(t->first);
+		if ((w = t->second) <= min || w > min + 2) del = true, d = t, _SOCK_CLOSE_F(t->first);
 	} if (del) chkAdMp.erase(d);
 	chkAdMut.unlock();
 }

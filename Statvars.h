@@ -1,23 +1,24 @@
 #pragma once
+#include <stdint.h>
 #include <iostream>
 #include <map>
 #include <atomic>
 using namespace std;
 
-extern unsigned __int8 percatdimaant[10];
-extern unsigned __int8 cataant;
+extern uint8_t percatdimaant[10];
+extern uint8_t cataant;
 
 class statvars {
 public:
 	statvars(void);
 	~statvars(void);
 	struct strtemp {
-		atomic<__int8> temp;
-		unsigned __int8* client;
+		atomic<int8_t> temp;
+		uint8_t* client;
 	};
 	map<unsigned int, char*> mpdimcat;
-	unsigned __int8 tempCnt;
-	map<unsigned __int8, strtemp*> mptemp;
+	uint8_t tempCnt;
+	map<uint8_t, strtemp*> mptemp;
 private:
 };
 //struct destatvars {
@@ -25,7 +26,7 @@ private:
 //	std::map<unsigned int, strdimvar> mapdimvars;
 //};
 //struct strdimvar {
-//	__int8 aant;
+//	int8_t aant;
 	//bool type[1] = { 0 };
-	//unsigned __int8 dimwaarde;
+	//uint8_t dimwaarde;
 //};

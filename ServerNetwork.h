@@ -1,12 +1,17 @@
 #pragma once
-#include <winsock2.h>
-#include <Windows.h>
-#include "NetworkServices.h"
+#include <stdint.h>
+#ifdef _WIN32
 #include <ws2tcpip.h>
+#pragma comment (lib, "Ws2_32.lib")
+#endif
+
+#include "NetworkServices.h"
+
 #include <map>
 #include <atomic>
+#include "Custom/custom_string.h"
 using namespace std; 
-#pragma comment (lib, "Ws2_32.lib")
+
 
 
 extern int vrijadres[100];
@@ -24,7 +29,7 @@ public:
     ~ServerNetwork(void);
 
 	// send data to all clients
-	bool receive(SOCKET* s, char * packets, int& totalSize);
+
 
 	// receive incoming data
     

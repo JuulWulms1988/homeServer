@@ -1,6 +1,8 @@
 #include "nSite.h"
 
 void clsNSite::func::getLsPrc() {
+	//char urlBuf[10]; 
+	static char urlInd[]{ 'i', 'n', 'd', '.', 'h', 't', 'm', '\0' }, urlInd2[]{ 'i', 'n', 'd', '2', '.', 'h', 't', 'm', '\0' }, urlLgF3[]{ 'l', 'g', 'F', '3', '.', 'h', 't', 'm', '\0' };
 	{
 		{
 			int loc = strbasprc::indChar('\r', get), rek = strbasprc::indChar('\n', get);
@@ -9,7 +11,16 @@ void clsNSite::func::getLsPrc() {
 			if (!rek) return;
 			get[(len = rek) - 1] = '\r';
 		}
-		int nLen = imgBl = 0; char* nGet = get + 5; url = NULL; bool flag = false; 	__int8 log = 1;
+		int nLen = imgBl = 0; char* nGet = get + 5; url = NULL; bool flag = false; 	int8_t log = 1;
+		/*enum urlEnum { __ind, __ind2, __lgF3 };
+		auto urlSet = [&](int X) {
+			char* Y = url = urlBuf;
+			switch (X) {
+			case __lgF3: *Y++ = 'l'; *Y++ = 'g'; *Y++ = 'F'; *Y++ = '3'; break;
+			case __ind:  *Y++ = 'i'; *Y++ = 'n'; *Y++ = 'd'; break;
+			case __ind2:  *Y++ = 'i'; *Y++ = 'n'; *Y++ = 'd'; *Y++ = '2'; break;
+			} *Y++ = '.'; *Y++ = 'h'; *Y++ = 't'; *Y++ = 'm'; *Y = '\0';
+		};*/ 
 		for (unsigned int t = 5; t < len; t++, nLen++) {
 			char b = nGet[nLen];
 			if (nLen > 30) url = NULL, nLen = -1, log = 1;
@@ -56,10 +67,10 @@ void clsNSite::func::getLsPrc() {
 			else if (log == 1 && nLen > 3 && nGet[0] == 'i' && nGet[1] == 'd' && nGet[2] == '=') {
 				if (p_wUsr.getId(strbasprc::cvintcharStr(nGet + 3), logId, logWId)) log = 0;
 			}
-			else if (!log && (log = getLsActieF(nGet, nLen))) url = "lgF3.htm", imgBl = 2;
+			else if (!log && (log = getLsActieF(nGet, nLen))) url = urlLgF3, imgBl = 2;
 			else if (!url && (!nLen || ((nLen < 6 && strbasprc::indChar('.', nGet) != -1) || strbasprc::indChar('.', nGet + (nLen - 6)) != -1))) {
 				if (nLen > 0 && nGet[nLen - 1] == '/') nGet[--nLen] = '\0';
-				if ((log && (((nLen == -1 && (url = "ind.htm")) && (imgBl = 2) && (flag = true)) || (nLen >= 8 && strbasprc::vergCharP(nGet + (nLen - 8), "back.jpg") || (nLen >= 4 && strbasprc::vergCharPH(nGet + (nLen - 3), ".js")) || (nLen >= 5 && strbasprc::vergCharPH(nGet + (nLen - 4), ".css")) || (strbasprc::vergCharP(nGet, "lgFr.htm") && (log = 2))))) || !log) {
+				if ((log && (((nLen == -1 && (url = urlInd)) && (imgBl = 2) && (flag = true)) || (nLen >= 8 && strbasprc::vergCharP(nGet + (nLen - 8), "back.jpg") || (nLen >= 4 && strbasprc::vergCharPH(nGet + (nLen - 3), ".js")) || (nLen >= 5 && strbasprc::vergCharPH(nGet + (nLen - 4), ".css")) || (strbasprc::vergCharP(nGet, "lgFr.htm") && (log = 2))))) || !log) {
 					char* B = NULL;
 					if (!url && nLen < 30) {
 						if ((nLen >= 5 && strbasprc::vergCharPH(nGet + (nLen - 5), ".html")) || (nLen >= 4 && strbasprc::vergCharPH(B = nGet + (nLen - 4), ".htm"))) imgBl = 2;
@@ -73,20 +84,20 @@ void clsNSite::func::getLsPrc() {
 		}
 				if (flag) break;
 				else nGet += nLen + 1, nLen = -1;
-		} if (len == 6) url = "ind2.htm", imgBl = 0;
+		} if (len == 6) url = urlInd2, imgBl = 0;
 		else if (imgBl == 2 && log) imgBl = 0;
 	}
 	
 
-	strncpy_s(buf, 6, "Site\\", bufLen = 5);
+	strncpy_s(buf, 6, "Site/", bufLen = 5);
 	if (url) {
 		for (unsigned int t = 0; url[t] != '\0'; t++)
-			if (url[t] == '/') buf[bufLen++] = '\\';
+			if (url[t] == '/') buf[bufLen++] = '/';
 			else buf[bufLen++] = url[t]; buf[bufLen] = '\0';
 			if (!fileObj.open(buf)) url = NULL;
 	}
 	if (!url) {
-		strncpy_s(buf + 5, 8, "ind.htm", bufLen = 5 + 7);
+		strncpy_s(buf + 5, 8, urlInd, bufLen = 5 + 7);
 		imgBl = 0;
 		if (!fileObj.open(buf)) return;
 	}
@@ -103,7 +114,7 @@ void clsNSite::func::getLsPrc() {
 	else voegS(fileObj.file, fileObj.fLen);
 }
 
-unsigned __int8 clsNSite::func::getLsActieF(char* nGet, int nLen) {
+uint8_t clsNSite::func::getLsActieF(char* nGet, int nLen) {
 	switch (nLen) {
 	case 4: 
 		if (strbasprc::vergCharP(nGet, "stwz")) return 4;
@@ -120,7 +131,7 @@ void clsNSite::func::voegS(char* x, unsigned long l) {
 	for (unsigned long t = 0; t < l; t++) voegC(*(x)++);
 }
 void clsNSite::func::voegSH(char* x, unsigned long l) {
-	char c; unsigned __int8 T; unsigned int B = T = 0;
+	char c; uint8_t T; unsigned int B = T = 0;
 	for (unsigned long t = 0; t < l && ((c = *(x++)) || !c); t++)
 		if (((T == 6 || T == 7) && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'x')) && 
 			((B += strbasprc::cvintcharint(c) * [&] { if (T == 6) return 60; else return 1; }()) || !B)) ||
@@ -133,13 +144,13 @@ void clsNSite::func::voegSH(char* x, unsigned long l) {
 		}
 }
 
-void clsNSite::func::voegFlag(unsigned __int8 x, unsigned int b) { 
-	for (unsigned __int8 t = 0; t < x; t++)
+void clsNSite::func::voegFlag(uint8_t x, unsigned int b) { 
+	for (uint8_t t = 0; t < x; t++)
 		if (!t) voegC('/');
 		else if (t == 1 || t == 8) voegC('*');
 		else if (t == 2 || t == 4) voegC('@'); 
 		else if (t == 3 || t == 5) voegC('?');
-		else voegC(strbasprc::cvintcharchar((unsigned __int8)([&] { if (t == 6) return b / 60; else return b % 60; })()));
+		else voegC(strbasprc::cvintcharchar((uint8_t)([&] { if (t == 6) return b / 60; else return b % 60; })()));
 }
 
 void clsNSite::func::voegC(char x) {
@@ -210,7 +221,15 @@ char* clsNSite::func::urlDecode(char* str) {
 			else { bufLen = 0; break; }
 		}
 		else if (bufLen < 127) {
-			sscanf_s(string (str).substr(i + 1, 2).c_str(), "%x", &ii);
+			{
+				char p[]{ '%', 'x', '\0' };
+				#ifdef _WIN32
+				sscanf_s(string(str).substr(i + 1, 2).c_str(), p, & ii);
+				#endif
+				#ifndef _WIN32
+				sscanf(string(str).substr(i + 1, 2).c_str(), p, &ii);
+				#endif	
+			}
 			ch = static_cast<char>(ii);
 			buf[bufLen++] = ch;
 			i = i + 2;

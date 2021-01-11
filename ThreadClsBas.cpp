@@ -1,6 +1,6 @@
 #include "ThreadCls.h"
 
-bool mainThreadCls::strMpCh::begin(mainThreadCls::strSndV& s) {
+bool mainThreadCls::strMpCh::begin(mainThreadCls::strSndV s) {
 	mut.lock();
 	if (ready) { ready = false; mut.unlock(); p = s; return true; }
 	if (lineCnt < ARSIZE_CLSMPCH) lineAr[(lineNo + lineCnt) % ARSIZE_CLSMPCH] = lAS{ val++, voeg(s, avAr[lineCnt]) }, lineCnt++;
@@ -22,11 +22,11 @@ bool mainThreadCls::strMpCh::end() {
 	return true;
 }
 
-bool mainThreadCls::strMpCha::begin(unsigned __int16& s) {
+bool mainThreadCls::strMpCha::begin(uint16_t& s) {
 	mut.lock();
 	if (ready) { ready = false; mut.unlock(); p = s; return true; }
 	if (lineCnt < ARSIZE_CLSMPCH) lineAr[(lineNo + lineCnt) % ARSIZE_CLSMPCH] = lAS{ val++, voeg(s, avAr[lineCnt]) }, lineCnt++;
-	else mp.insert(pair<unsigned int, unsigned __int16>(val++, { s }));
+	else mp.insert(pair<unsigned int, uint16_t>(val++, { s }));
 	mut.unlock();
 	return false;
 }

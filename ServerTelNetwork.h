@@ -1,12 +1,17 @@
 #pragma once
-#include <winsock2.h>
-#include <Windows.h>
-#include "NetworkServices.h"
+
+#ifdef _WIN32
 #include <ws2tcpip.h>
+#pragma comment (lib, "Ws2_32.lib")
+#endif
+
+#include "NetworkServices.h"
+
 #include <map>
+#include "Custom/custom_string.h"
 #include "NetworkData.h"
 using namespace std; 
-#pragma comment (lib, "Ws2_32.lib")
+
 
 
 
@@ -17,7 +22,7 @@ public:
     ~ServerTelNetwork(void);
 
 	// receive incoming data
-    int receiveData(unsigned int client_id, char * recvbuf);
+    
 	
 	// accept new connections
     SOCKET acceptNewClient();

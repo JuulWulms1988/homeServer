@@ -12,7 +12,7 @@ struct strucfile {
 //	unsigned int lsdergllength(char * deregel, unsigned int *regelno);
 	unsigned int lsdergllength(char * deregel, unsigned int *regelno);
 	unsigned int lsfilelngth(char * lsfile);
-	unsigned int stwebfile(char * demap, unsigned __int8 * demaplength, char * defile, unsigned __int8 * defilelength, char * stuur, char* voeging, unsigned __int8 voeginglen);
-	void beginregel(char * demap, unsigned __int8* demaplength, char * defile, unsigned __int8* defilelength);
-	void fopen(char * demap, unsigned __int8 * demaplength, char * defile, unsigned __int8 * defilelength);
+	unsigned int stwebfile(const char * demap, uint8_t * demaplength, const char * defile, uint8_t * defilelength, char * stuur, char* voeging, uint8_t voeginglen);
+	void beginregel(const char * demap, uint8_t* demaplength, const char * defile, uint8_t* defilelength);
+	void fopen(const char * demap, uint8_t * demaplength, const char * defile, uint8_t * defilelength);
 };

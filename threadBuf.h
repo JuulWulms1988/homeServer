@@ -1,5 +1,6 @@
 #pragma once
-#include <IOstream>
+#include <stdint.h>
+#include <iostream>
 #include <condition_variable>
 #include <mutex>
 #include <thread>
@@ -21,8 +22,8 @@ public:
 private:
 	friend struct recStruct;
 	mutex allMut;
-	unsigned __int8 avCnt[THRDBFCLS_CNT];
-	void raise(unsigned __int8 n) { allMut.lock(), avCnt[n]++, allMut.unlock(); }
+	uint8_t avCnt[THRDBFCLS_CNT];
+	void raise(uint8_t n) { allMut.lock(), avCnt[n]++, allMut.unlock(); }
 	unsigned int avNow = 0;
 	struct tObjS {
 		struct vStrS {
@@ -31,7 +32,7 @@ private:
 			void* pA2;
 			void f() { pF(pA, pA2); }
 		};
-		unsigned __int8 no;
+		uint8_t no;
 		vStrS vStr[21];
 		condition_variable cv;
 		condition_variable cvU;
@@ -39,7 +40,7 @@ private:
 		mutex bMut;
 		bool ready = false;
 		void voeg(tObjS::vStrS& s);
-		void func(unsigned __int8 n);
+		void func(uint8_t n);
 	}tObj[THRDBFCLS_CNT];
 	friend struct tObjs;
 

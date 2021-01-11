@@ -1,6 +1,8 @@
 #pragma once
+#include <stdint.h>
 #include <map>
 #include <iostream>
+#include "Custom/custom_string.h"
 
 using namespace std;
 
@@ -9,19 +11,19 @@ public:
 	clswbusr(void);
 	~clswbusr(void);
 	unsigned int voegid(const unsigned int* usrno);
-	void mpupdate(unsigned __int8 minuut);
+	void mpupdate(uint8_t minuut);
 	struct clswbusrlogstr {
 		char* usr;
-		unsigned __int8* usrlen;
+		uint8_t* usrlen;
 		char* psw;
-		unsigned __int8* pswlen;
+		uint8_t* pswlen;
 	};
 	struct strloghost {
 		const unsigned int* usrno;
-		unsigned __int8* tijd;
+		uint8_t* tijd;
 	};
 	map<unsigned int, clswbusrlogstr*> mpusr;
 	map<unsigned int, strloghost*> mphost;
 private:
-	bool vergminuut(unsigned __int8 x, unsigned __int8 y);
+	bool vergminuut(uint8_t x, uint8_t y);
 };

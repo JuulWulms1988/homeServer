@@ -4,7 +4,7 @@
 #define LEDPL_VARAANT1 4
 #define LEDPL_VARAANT2 1
 
-extern unsigned __int8 LEDPL_CNT;
+extern uint8_t LEDPL_CNT;
 
 class mainThreadCls::clsLedPl {
 public:
@@ -13,43 +13,43 @@ private:
 	struct clsLedPlObj; 
 	mutex threadMut;
 	friend struct clsExMes::strExec; friend struct stSndStt; friend class trLisHomeCls; friend class extCls; friend class clsNSite; 
-	map<unsigned __int8, clsLedPlObj&> mpObj;
-	clsLedPlObj* toObjF(unsigned __int8 adr) { map<unsigned __int8, clsLedPlObj&>::iterator it = mpObj.find(adr); if (it != mpObj.end()) return &it->second; else return NULL; }
+	map<uint8_t, clsLedPlObj&> mpObj;
+	clsLedPlObj* toObjF(uint8_t adr) { map<uint8_t, clsLedPlObj&>::iterator it = mpObj.find(adr); if (it != mpObj.end()) return &it->second; else return NULL; }
 };
 
 struct mainThreadCls::clsLedPl::clsLedPlObj {
 	strStrCnt& mpCh;
-	unsigned __int8 no; 
-	unsigned __int8 adr; 
-	unsigned __int8 stripCnt;
+	uint8_t no; 
+	uint8_t adr; 
+	uint8_t stripCnt;
 	void reqFunc();
 	atomic<unsigned int> upN = 1;
-	atomic<unsigned __int8> upM = 0;
-	atomic<unsigned __int8> upD = 0;
-	atomic<unsigned __int8> upU = 0;
-	atomic<unsigned __int8> upMi = 0;
-	atomic<unsigned __int8> upS = 0;
+	atomic<uint8_t> upM = 0;
+	atomic<uint8_t> upD = 0;
+	atomic<uint8_t> upU = 0;
+	atomic<uint8_t> upMi = 0;
+	atomic<uint8_t> upS = 0;
 	char bufPsMs[32];
 	strSndV sndS; strSndV progS; strSndV voegS;
 	bool ledPlFunc(strSndV s);
 	void varFunc(char* xLs, int xLen);
 	void atDetFunc(char* xLs, int xLen);
-	bool varSFunc(unsigned __int8 noStr, unsigned __int8 noVal, unsigned long wVal);
-	void setVal(unsigned __int8 n, unsigned long v, unsigned __int8 c);
+	bool varSFunc(uint8_t noStr, uint8_t noVal, unsigned long wVal);
+	void setVal(uint8_t n, unsigned long v, uint8_t c);
 	shared_mutex varMut;
 	map<unsigned int, char*> mpPoint; 
 	mutex mutPoint;
 
 	unsigned int mpVal = 0;
-	unsigned __int8 mplineNo = 0;
+	uint8_t mplineNo = 0;
 	char* mpar[ARSIZE_CLSMPCH];
-	unsigned __int8 mpvoeg(char* s, unsigned __int8 no) { mpar[no] = s; return no; }
-	unsigned __int8 mpavAr[ARSIZE_CLSMPCH];
-	unsigned __int8 mplineCnt = mainThreadCls::set_ClsMpCh(mpavAr);
+	uint8_t mpvoeg(char* s, uint8_t no) { mpar[no] = s; return no; }
+	uint8_t mpavAr[ARSIZE_CLSMPCH];
+	uint8_t mplineCnt = mainThreadCls::set_ClsMpCh(mpavAr);
 
 	struct lAS {
 		unsigned int cnt;
-		unsigned __int8 no;
+		uint8_t no;
 	};
 
 	lAS mplineAr[ARSIZE_CLSMPCH];
@@ -64,50 +64,50 @@ struct mainThreadCls::clsLedPl::clsLedPlObj {
 
 	struct varStr {
 		bool* parChldAr;
-		unsigned __int8 parChld = 1;
-		unsigned __int8 helder = 0;
-		unsigned __int8 rgbPauze = 0;
+		uint8_t parChld = 1;
+		uint8_t helder = 0;
+		uint8_t rgbPauze = 0;
 		bool negDlay = false;
 		unsigned int gamDlay = 0;
 		bool negGamDlay = false;
 		unsigned int gamPer = 0;
-		unsigned __int8 gamClr = 0;
-		unsigned __int8 gamVal = 0;
-		unsigned __int8 gamIVal = 0;
-		unsigned __int8 gamIHel = 0;
+		uint8_t gamClr = 0;
+		uint8_t gamVal = 0;
+		uint8_t gamIVal = 0;
+		uint8_t gamIHel = 0;
 		unsigned int helDlay = 0;
 		bool negHelCur = 0;
-		unsigned __int8 gamPauze = 0;
-		unsigned __int8 helAmp = 0;
+		uint8_t gamPauze = 0;
+		uint8_t helAmp = 0;
 		unsigned int dlay = 0;
-		unsigned __int8 gamInterval = 0;
+		uint8_t gamInterval = 0;
 		unsigned int helPer = 0;
 		unsigned int per = 0;
-		unsigned __int8 randVar = 0;
-		unsigned int val(unsigned __int8 x); unsigned int voegChld(unsigned __int8 b, unsigned __int8 m, char* ls, bool* gezet) {
-			unsigned int u = 0; for (unsigned __int8 t = b; t < m; t++) if (parChldAr[t]) gezet[t] = true, ls[u++] = '_', ls[u++] = strbasprc::cvintcharchar(t); return u;
+		uint8_t randVar = 0;
+		unsigned int val(uint8_t x); unsigned int voegChld(uint8_t b, uint8_t m, char* ls, bool* gezet) {
+			unsigned int u = 0; for (uint8_t t = b; t < m; t++) if (parChldAr[t]) gezet[t] = true, ls[u++] = '_', ls[u++] = strbasprc::cvintcharchar(t); return u;
 		} 
 	}; varStr* var;
 	map<unsigned int, strSndV> mpAgg; unsigned int aggVal = 0; unsigned int aggSet = 0; bool blAgg = true;
-	unsigned __int8 agglineNo = 0;
+	uint8_t agglineNo = 0;
 	strSndV aggar[ARSIZE_CLSMPCH];
-	unsigned __int8 aggvoeg(strSndV s, unsigned __int8 no) { aggar[no] = s; return no; }
-	unsigned __int8 aggavAr[ARSIZE_CLSMPCH];
-	unsigned __int8 agglineCnt = mainThreadCls::set_ClsMpCh(aggavAr);
+	uint8_t aggvoeg(strSndV s, uint8_t no) { aggar[no] = s; return no; }
+	uint8_t aggavAr[ARSIZE_CLSMPCH];
+	uint8_t agglineCnt = mainThreadCls::set_ClsMpCh(aggavAr);
 
 	lAS agglineAr[ARSIZE_CLSMPCH];
 
 	strCv cvPsMs{ true }; bool cvPsMsBl = true; void psMsPr(); void flagPsMsPr(); void empPsMsPr(); void psMsPr2(strSndV& s);
-	void passPrep(strSndV s, strMpCh& pMCh, unsigned __int8 ad); void pass(strSndV& s); strMpCh passMp; void progPsMs(); void flagPsMs(); void empPsMs(); bool progress();
+	void passPrep(strSndV s, strMpCh& pMCh, uint8_t ad); void pass(strSndV& s); strMpCh passMp; void progPsMs(); void flagPsMs(); void empPsMs(); bool progress();
 	bool* gezet;
 	clsLedPlObj& begin() { 
 		sndS.len = 0, sndS.bron = NULL, voegS = sndS, sndS.lsNo = mpCh.get(sndS.pack), voegS.lsNo = mpCh.get(voegS.pack), *voegS.pack = '&', voegS.len = 1; 
-		unsigned __int8 tel = 0; varStr* t = var = new varStr[stripCnt]; while (tel < stripCnt) {
+		uint8_t tel = 0; varStr* t = var = new varStr[stripCnt]; while (tel < stripCnt) {
 		t->parChldAr = new bool[stripCnt];
-		for (unsigned __int8 tt = 0; tt < stripCnt; tt++) if (tt == tel) t->parChldAr[tt] = true; else t->parChldAr[tt] = false; t++; gezet = new bool[stripCnt]; tel++;
+		for (uint8_t tt = 0; tt < stripCnt; tt++) if (tt == tel) t->parChldAr[tt] = true; else t->parChldAr[tt] = false; t++; gezet = new bool[stripCnt]; tel++;
 		} return *this;
-	} void voegFrCons(strSndV& s, unsigned __int8 ad); strMpCh voegMpCh; void voegF(strSndV &s); void remChld(unsigned __int8 x) {
-		for (unsigned __int8 t, t2 = t = 0, m = var[x].parChld; t2 < m; t++) if (t == x) t2++; else if (var[x].parChldAr[t]) t2++, var[t].parChldAr[x] = false, var[t].parChld--;
+	} void voegFrCons(strSndV s, uint8_t ad); strMpCh voegMpCh; void voegF(strSndV &s); void remChld(uint8_t x) {
+		for (uint8_t t, t2 = t = 0, m = var[x].parChld; t2 < m; t++) if (t == x) t2++; else if (var[x].parChldAr[t]) t2++, var[t].parChldAr[x] = false, var[t].parChld--;
 	}
 };
 

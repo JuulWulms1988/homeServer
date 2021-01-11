@@ -21,7 +21,7 @@ void threadBufCls::tObjS::voeg(tObjS::vStrS& s) {
 	} cv.notify_one();
 }
 
-void threadBufCls::tObjS::func(unsigned __int8 n) {
+void threadBufCls::tObjS::func(uint8_t n) {
 	while (true) {
 		bMut.lock(), p_TrBC.raise(n), bMut.unlock();
 		{
@@ -35,5 +35,5 @@ void threadBufCls::tObjS::func(unsigned __int8 n) {
 
 void threadBufCls::threadBufCls::open() {
 	for (unsigned int t = 0, m = THRDBFCLS_CNT; t < m && [&] { allMut.lock(), avCnt[t] = 0, allMut.unlock(); return true; }(); t++)
-		for (__int8 tt = 0; tt < 20; tt++) thread([](tObjS* p, unsigned __int8 n) { p->func(n); }, tObj + t, tt).detach();
+		for (int8_t tt = 0; tt < 20; tt++) thread([](tObjS* p, uint8_t n) { p->func(n); }, tObj + t, tt).detach();
 }

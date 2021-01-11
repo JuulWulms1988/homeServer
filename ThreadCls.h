@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 #include "Basproc.h"
 #include <map>
 #include <atomic>
@@ -10,11 +11,15 @@
 #define ARSIZE_CLSMPCH 100
 //#define MAX_PACKET_SIZE 1000
 #define DELAY_VAL_SET 2
-extern unsigned __int8 LEDPL_CNT;
+extern uint8_t LEDPL_CNT;
 extern void* bootPtrAlg;
 
 //
 #include "clstijd.h"
+
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 extern clstijd* p_clstijd;
 extern bool kaasdel;
@@ -37,9 +42,9 @@ class extCls {
 public:
 	static void begin();
 	static void end();
-	static bool piSPlay(__int8 x);
-	static void piSWrite(unsigned __int8 i, char* x);
-	static void* piSRead(unsigned __int8 i);
+	static bool piSPlay(int8_t x);
+	static void piSWrite(uint8_t i, char* x);
+	static void* piSRead(uint8_t i);
 	static char* read(char* x, ifstream& i) { unsigned int tel = 0; char t; while ((t = i.get()) != '\n' && t != -1 && !i.eof()) x[tel++] = t; x[tel] = '\0'; return x; }
 };
 
@@ -58,11 +63,11 @@ public:
 		};
 	} timedComNoS[100];
 	class radioStr;
-	static void sluisPiScreenF(unsigned __int16 s, unsigned __int8 ad);
-	static void killProc(char* x);
+	static void sluisPiScreenF(uint16_t s, uint8_t ad);
+	static void killProc(const char* x);
 	struct deBootStr {
 		mutex mut;
-		unsigned __int8 stat = 0;
+		uint8_t stat = 0;
 		condition_variable cvMain;
 		condition_variable cvSub;
 		void subF() {
@@ -75,12 +80,12 @@ public:
 			} if (uit) delete this;
 		}
 		void mainF() {
-			cvMain.wait(unique_lock<mutex>(mut), [&] { return stat / 2; }), stat++; cvSub.notify_all();
+			{ unique_lock<mutex>lk(mut); cvMain.wait(lk, [&] { return stat / 2; }), stat++;	} cvSub.notify_all();
 		}
 	};
-	static void piScreenOffSluis(unsigned __int16 ad);
+	static void piScreenOffSluis(uint16_t ad);
 	mutex threadMut[101];
-	static unsigned __int8 set_ClsMpCh(unsigned __int8* p) { for (__int8 t = 0, i = ARSIZE_CLSMPCH - 1; t < ARSIZE_CLSMPCH; t++) p[t] = i--; return 0; }
+	static uint8_t set_ClsMpCh(uint8_t* p) { for (int8_t t = 0, i = ARSIZE_CLSMPCH - 1; t < ARSIZE_CLSMPCH; t++) p[t] = i--; return 0; }
 	int jgjgjg = 2;
 	void jajaja() { ffMut.lock(); cout << "EEEJ: " << jgjgjg << "\n"; ffMut.unlock(); }
 
@@ -90,13 +95,13 @@ public:
 		char* pack;
 		int len;
 		clsExMes* bron;
-		__int8 lsNo;
+		int8_t lsNo;
 		void ret();
 		unsigned int voegChar(char x) { pack[len++] = x; return len; }
 	};
 	/*
 	struct strMpCh {
-		unsigned __int8 ad;
+		uint8_t ad;
 		unsigned int set = 0;
 		unsigned int val = 0;
 		bool ready = true;
@@ -117,25 +122,25 @@ public:
 
 		//void func(Functor x);
 
-		unsigned __int8 ad;
+		uint8_t ad;
 		unsigned int set = 0;
 		unsigned int val = 0;
 		bool ready = true;
 		mutex mut;
 		map<unsigned int, strSndV> mp;
-		bool begin(strSndV& s);
+		bool begin(strSndV s);
 		bool end();
 		strSndV p;
-		void wait(condition_variable& cv) { cv.wait(unique_lock<mutex>(mut), [&] { return ready; }); }
-		unsigned __int8 lineNo = 0;
+		void wait(condition_variable& cv) { unique_lock<mutex>lk(mut); cv.wait(lk, [&] { return ready; }); }
+		uint8_t lineNo = 0;
 		strSndV ar[ARSIZE_CLSMPCH];
-		unsigned __int8 voeg(strSndV s, unsigned __int8 no) { ar[no] = s; return no; }
-		unsigned __int8 avAr[ARSIZE_CLSMPCH];
-		unsigned __int8 lineCnt = mainThreadCls::set_ClsMpCh(avAr);
+		uint8_t voeg(strSndV s, uint8_t no) { ar[no] = s; return no; }
+		uint8_t avAr[ARSIZE_CLSMPCH];
+		uint8_t lineCnt = mainThreadCls::set_ClsMpCh(avAr);
 
 		struct lAS {
 			unsigned int cnt;
-			unsigned __int8 no;
+			uint8_t no;
 		};
 
 		lAS lineAr[ARSIZE_CLSMPCH];
@@ -148,25 +153,25 @@ public:
 
 		//void func(Functor x);
 
-		unsigned __int8 ad;
+		uint8_t ad;
 		unsigned int set = 0;
 		unsigned int val = 0;
 		bool ready = true;
 		mutex mut;
-		map<unsigned int, unsigned __int16> mp;
-		bool begin(unsigned __int16& s);
+		map<unsigned int, uint16_t> mp;
+		bool begin(uint16_t& s);
 		bool end();
-		unsigned __int16 p;
-		void wait(condition_variable& cv) { cv.wait(unique_lock<mutex>(mut), [&] { return ready; }); }
-		unsigned __int8 lineNo = 0;
-		unsigned __int16 ar[ARSIZE_CLSMPCH];
-		unsigned __int8 voeg(unsigned __int16 s, unsigned __int8 no) { ar[no] = s; return no; }
-		unsigned __int8 avAr[ARSIZE_CLSMPCH];
-		unsigned __int8 lineCnt = mainThreadCls::set_ClsMpCh(avAr);
+		uint16_t p;
+		void wait(condition_variable& cv) { unique_lock<mutex>lk(mut); cv.wait(lk, [&] { return ready; }); }
+		uint8_t lineNo = 0;
+		uint16_t ar[ARSIZE_CLSMPCH];
+		uint8_t voeg(uint16_t s, uint8_t no) { ar[no] = s; return no; }
+		uint8_t avAr[ARSIZE_CLSMPCH];
+		uint8_t lineCnt = mainThreadCls::set_ClsMpCh(avAr);
 
 		struct lAS {
 			unsigned int cnt;
-			unsigned __int8 no;
+			uint8_t no;
 		};
 
 		lAS lineAr[ARSIZE_CLSMPCH];
@@ -177,17 +182,17 @@ public:
 	class trLisHomeCls;
 		
 	struct strStrCnt {
-		unsigned int len; unsigned __int8 no;
-		strStrCnt& open(__int8 c, unsigned int n, unsigned int l);
-		__int8 get(char*& x);
-		void ret(__int8 x) { (lock_guard<mutex>(mut)), lsA[lsT++] = -x - 1; cv.notify_one(); }
-		void wait() { cv.wait(unique_lock<mutex>(mut), [&] { return (lsT + 1) / (cnt + 1); }); };
-		char* lPosF(char* x, unsigned int y) { for (unsigned __int8 t = 0; t < 2; t++) x[y + t] = x[len - 2 + t]; return x; }
+		unsigned int len; uint8_t no;
+		strStrCnt& open(int8_t c, unsigned int n, unsigned int l);
+		int8_t get(char*& x);
+		void ret(int8_t x) { (lock_guard<mutex>(mut)), lsA[lsT++] = -x - 1; cv.notify_one(); }
+		void wait() { unique_lock<mutex>lk(mut); cv.wait(lk, [&] { return (lsT + 1) / (cnt + 1); }); };
+		char* lPosF(char* x, unsigned int y) { for (uint8_t t = 0; t < 2; t++) x[y + t] = x[len - 2 + t]; return x; }
 		static unsigned int lPosObNoF(char* x, unsigned int l, bool type);
-		__int8 cnt;
-		__int8 lsT;
+		int8_t cnt;
+		int8_t lsT;
 		char* ls;
-		__int8* lsA;
+		int8_t* lsA;
 		condition_variable cv;
 		mutex mut;
 	}; strStrCnt* strCntS;
@@ -196,43 +201,43 @@ public:
 		clsExMes(trLisHomeCls* pp);
 		~clsExMes();
 		trLisHomeCls* pLisHome;
-		static void naCheckF(strSndV& s, unsigned __int8 ad, unsigned __int8 ad2);
+		static void naCheckF(strSndV s, uint8_t ad, uint8_t ad2);
 		struct exStr;
 		struct var {
 			char* x;
-			__int8 lsNow;
-			unsigned __int8 len;
-			__int8 type;
+			int8_t lsNow;
+			uint8_t len;
+			int8_t type;
 		};
 		struct exStr;
 		struct strExec {
-			void set(clsExMes* p, __int8 x);
+			void set(clsExMes* p, int8_t x);
 			clsExMes* point = NULL;
 			exStr* pExMp;
-			void psPlayF(unsigned __int8 x, unsigned __int8 ad);
+			void psPlayF(uint8_t x, uint8_t ad);
 			memFileObj fileObj;
 			trLisHomeCls* bufXX;
 			char* file;
 			var strVarS;
 			void sluisPiScreenFC();
-			__int8 vgstrVarS(__int8 x) {  }
+			//int8_t vgstrVarS(int8_t x) {  }
 			unsigned int getPointLed(char* x);
 			unsigned long fLoc;
 			void fLock() { file = fileObj.file, fLoc = fileObj.loc; }
 			void fUnlock() { fileObj.file = file, fileObj.loc = fLoc; }
 			bool blDim;
-			__int8 lsNow;
+			int8_t lsNow;
 			char* ls;
 			char* str;
-			__int8 strNow;
+			int8_t strNow;
 			char buf[64];
 			char buf2[64];
-			__int8 now;
-			unsigned __int8 bufX;
-			unsigned __int8 sendLen;
+			int8_t now;
+			uint8_t bufX;
+			uint8_t sendLen;
 			int len;
-			unsigned __int8 strAd;
-			unsigned __int8 zendId;
+			uint8_t strAd;
+			uint8_t zendId;
 			void start();
 			void main();
 			void cancel();
@@ -240,11 +245,11 @@ public:
 			void readMes();
 			void send(bool x);
 			void passLpFromC();
-			void voegLedPlaf(unsigned __int8 ad);
-			void sendLedPl(unsigned __int8 ad);
+			void voegLedPlaf(uint8_t ad);
+			void sendLedPl(uint8_t ad);
 			void piScreenF();
 			void temp();
-			void naCheck(strSndV& s, unsigned __int8 ad);
+			void naCheck(strSndV& s, uint8_t ad);
 			void stReq();
 			void actionFunc(); void actionWFunc();
 			bool stverzDim();
@@ -254,11 +259,11 @@ public:
 			clsExMes* point;
 			mutex mut;
 			mutex mutLdPlPoint;
-			__int8 iNo = 0;
-			__int8 iT = 20;
-			__int8 iA[20];
+			int8_t iNo = 0;
+			int8_t iT = 20;
+			int8_t iA[20];
 			strExec i[20];
-			void set(__int8 t, __int8 z) { iA[t] = i[t].now = z; };
+			void set(int8_t t, int8_t z) { iA[t] = i[t].now = z; };
 			unsigned int valF = 0;
 			unsigned int setF = 0;
 			unsigned int setS = 0;
@@ -268,28 +273,28 @@ public:
 			bool diff(bool x) { if (x) return valF - setF; return valS - setS; }
 			bool avail() { return diff(false) + diff(true); }
 			bool comF() { return diff(true) * diff(false); }
-			void wait() { cv.wait(unique_lock<mutex>(mut), [&] {return (iT / 20); }); for (unsigned __int8 t = 0; t < 20; t++) i[t].cancel(); }
+			void wait() { { unique_lock<mutex>lk(mut); cv.wait(lk, [&] {return (iT / 20); }); } for (uint8_t t = 0; t < 20; t++) i[t].cancel(); }
 			map<unsigned int, var> mpS;
 			map<unsigned int, var> mpF;
 			condition_variable cv;
-			void voeg(var& s);
-			bool ret(var& s, __int8 n);
-			unsigned __int8 lineNo = 0;
+			void voeg(var s);
+			bool ret(var& s, int8_t n);
+			uint8_t lineNo = 0;
 			var ar[ARSIZE_CLSMPCH];
-			unsigned __int8 voegf(var s, unsigned __int8 no) { ar[no] = s; return no; }
-			unsigned __int8 avAr[ARSIZE_CLSMPCH];
-			unsigned __int8 lineCnt = mainThreadCls::set_ClsMpCh(avAr);
+			uint8_t voegf(var s, uint8_t no) { ar[no] = s; return no; }
+			uint8_t avAr[ARSIZE_CLSMPCH];
+			uint8_t lineCnt = mainThreadCls::set_ClsMpCh(avAr);
 			struct lAS {
 				unsigned int cnt;
-				unsigned __int8 no;
+				uint8_t no;
 			};
 
 			lAS lineAr[ARSIZE_CLSMPCH];
-			unsigned __int8 lineNof = 0;
+			uint8_t lineNof = 0;
 			var arf[ARSIZE_CLSMPCH];
-			unsigned __int8 voegff(var s, unsigned __int8 no) { arf[no] = s; return no; }
-			unsigned __int8 avArf[ARSIZE_CLSMPCH];
-			unsigned __int8 lineCntf = mainThreadCls::set_ClsMpCh(avArf);
+			uint8_t voegff(var s, uint8_t no) { arf[no] = s; return no; }
+			uint8_t avArf[ARSIZE_CLSMPCH];
+			uint8_t lineCntf = mainThreadCls::set_ClsMpCh(avArf);
 
 
 			lAS lineArf[ARSIZE_CLSMPCH];
@@ -299,13 +304,13 @@ public:
 		condition_variable cvSend;
 		mutex sendMut;
 		strCv cvEx;
-		__int8 getStr(char*& x);
-		void retStr(__int8 x) { (lock_guard<mutex>(sendMut)), lsA[lsT++] = x; cvSend.notify_one(); };
+		int8_t getStr(char*& x);
+		void retStr(int8_t x) { (lock_guard<mutex>(sendMut)), lsA[lsT++] = x; cvSend.notify_one(); };
 		char lsP[3200];
-		__int8 lsT = 99;
-		__int8 lsA[100];
+		int8_t lsT = 99;
+		int8_t lsA[100];
 	private:
-		unsigned __int8 strAd;
+		uint8_t strAd;
 	};
 	mainThreadCls();
 
@@ -313,12 +318,12 @@ public:
 		trLisHomeCls* bufX;
 		int sendLen;
 		char* ls;
-		__int8 lsNow;
-		unsigned __int8 strAd;
-		unsigned __int8 zendId;
-		void tijdPr() { thread([&] { while (true) tijdUpdate(), Sleep(10); }).detach(); }
+		int8_t lsNow;
+		uint8_t strAd;
+		uint8_t zendId;
+		void tijdPr();
 		void tijdUpdate();
-		void tijdUpdate2(char update, unsigned __int8 adress);
+		void tijdUpdate2(char update, uint8_t adress);
 		void send();
 		void chckSiteAd();
 		void chckTelAd();
@@ -326,12 +331,12 @@ public:
 
 
 	//char* 
-	void voegAdr(unsigned __int8 sess);
-	void checkAdr(unsigned __int8 min);
+	void voegAdr(uint8_t sess);
+	void checkAdr(uint8_t min);
 	mutex mutChkAd;
 	bool blArdChk[2];
 	atomic<bool> blmutChkAd{ false };
-	map<unsigned __int8, __int8> mpChkAd;
+	map<uint8_t, int8_t> mpChkAd;
 	void tijdProc();
 	bool sesFull = false;
 	class trLisHomeCls {
@@ -342,21 +347,21 @@ public:
 		strCv cvLis{ true };
 		void loop(SOCKET* sock);
 		void sendPrep(strSndV s, strMpCh&);
-		void send(strSndV& s, unsigned __int8 ad);
+		void send(strSndV& s, uint8_t ad);
 		void sendPr();
 		atomic<bool> available;
 		atomic<bool> close;
 		atomic<bool> del;
 		SOCKET socket;
 		unsigned int strLen = 0;
-		atomic<unsigned __int8> adrs;
+		atomic<uint8_t> adrs;
 		clsExMes* exMes = new clsExMes(this);
-		atomic<unsigned __int8> mpSesNo;
-		void closeF() { del.store(true); closesocket(socket); }
+		atomic<uint8_t> mpSesNo;
+		void closeF() { del.store(true); NetworkMethods::sockCloseF(socket); }
 		unsigned int timedComNo;
 	private:
 		friend struct clsExMes::strExec;
-		void chSerAgg(strSndV& s); void chSerAggPl(unsigned __int8 adrB);
+		void chSerAgg(strSndV& s); void chSerAggPl(uint8_t adrB);
 		clsExMes::exStr* exCls{ &exMes->exCls };
 		const char aanv[3] = { '-', '@', '#' };
 		char thisChar;
@@ -369,16 +374,16 @@ public:
 		int dimCBufLen;
 		char* dimLs;
 		int dimSendLen;
-		__int8 dimLsNow;
+		int8_t dimLsNow;
 		memFileObj dimFileObj = memFileObj(fileData);
 		void dimExF(strSndV s);
 		void dimExAF(char* str, int len);
-		unsigned __int8 dimRicht; unsigned __int8 dimW;
-		__int8 exNow = 0;
+		uint8_t dimRicht; uint8_t dimW;
+		int8_t exNow = 0;
 		bool lsAr;
 		char ls[2][1001];
 		int iResult;
-		unsigned __int8 adAd;
+		uint8_t adAd;
 		mutex muClose;
 		condition_variable cvClose;
 		bool closeMut;
@@ -388,22 +393,22 @@ public:
 		unsigned int sendSet;
 
 
-		unsigned __int8 sndlineNo = 0;
+		uint8_t sndlineNo = 0;
 		strSndV sndar[ARSIZE_CLSMPCH];
-		unsigned __int8 sndvoeg(strSndV s, unsigned __int8 no) { sndar[no] = s; return no; }
-		unsigned __int8 sndavAr[ARSIZE_CLSMPCH];
-		unsigned __int8 sndlineCnt = mainThreadCls::set_ClsMpCh(sndavAr);
+		uint8_t sndvoeg(strSndV s, uint8_t no) { sndar[no] = s; return no; }
+		uint8_t sndavAr[ARSIZE_CLSMPCH];
+		uint8_t sndlineCnt = mainThreadCls::set_ClsMpCh(sndavAr);
 		strSndV sndSStr;
 
 		struct lAS {
 			unsigned int cnt;
-			unsigned __int8 no;
+			uint8_t no;
 		};
 
 		lAS sndlineAr[ARSIZE_CLSMPCH];
 
 
-		unsigned __int8 strAanv;
+		uint8_t strAanv;
 		void messPr(char* mes, unsigned int len);
 	}webLisHome;
 
@@ -412,13 +417,13 @@ public:
 	trLisHomeCls* accHome;
 	void trAcc(SOCKET* s);
 	bool newSes();
-	trLisHomeCls* sesPoint(mutex* mut, unsigned __int8 no);
-	unsigned __int8 adresNo(unsigned __int8 no);
+	trLisHomeCls* sesPoint(mutex* mut, uint8_t no);
+	uint8_t adresNo(uint8_t no);
 	strCv cvAcc = { true };
 	struct stSndStt {
-		unsigned __int8 type;
+		uint8_t type;
 		unsigned int no;
-		unsigned __int8 val;
+		uint8_t val;
 		unsigned long loc;
 		clsExMes* p;
 		char* fl;
@@ -426,26 +431,26 @@ public:
 		void func();
 		void funcSnd();
 		void funcSnd2();
-		void ledPlF(char* ls, __int8 lsNow, unsigned __int8 strAd);
+		void ledPlF(char* ls, int8_t lsNow, uint8_t strAd);
 		void funcD();
-		//void ledPlF(char* ls, __int8 lsNow, unsigned __int8 strAd);
+		//void ledPlF(char* ls, int8_t lsNow, uint8_t strAd);
 	};
 	struct statStrucStr {
 		stSndStt sluisS;
 		map<unsigned int, stSndStt> mp;
 		unsigned int val; unsigned int set = val = 0;
 		bool ready = true; mutex mut;
-		void start(stSndStt& st, unsigned __int8 ad);
+		void start(stSndStt st, uint8_t ad);
 		bool check();
-		unsigned __int8 lineNo = 0;
+		uint8_t lineNo = 0;
 
 		stSndStt ar[ARSIZE_CLSMPCH];
-		unsigned __int8 voeg(stSndStt s, unsigned __int8 no) { ar[no] = s; return no; }
-		unsigned __int8 avAr[ARSIZE_CLSMPCH];
-		unsigned __int8 lineCnt = mainThreadCls::set_ClsMpCh(avAr);
+		uint8_t voeg(stSndStt s, uint8_t no) { ar[no] = s; return no; }
+		uint8_t avAr[ARSIZE_CLSMPCH];
+		uint8_t lineCnt = mainThreadCls::set_ClsMpCh(avAr);
 		struct lAS {
 			unsigned int cnt;
-			unsigned __int8 no;
+			uint8_t no;
 		};
 
 		lAS lineAr[ARSIZE_CLSMPCH];
@@ -468,13 +473,13 @@ private:
 	//friend class clsExMes::strExec;
 	bool delay;
 	void openLdPl();
-	map<unsigned __int8, trLisHomeCls*> ses;
+	map<uint8_t, trLisHomeCls*> ses;
 	shared_mutex sMutSes;
 	shared_mutex sMutAdr;
-	unsigned __int8 adress[100];
+	uint8_t adress[100];
 	strCv cvAccFull{ false };
 	mutex timeMut;
-	char radBuf[332]{ 's', 't', 'a', 'r', 't', ' ', '\"', 'C', ':', '\\', 'P', 'r', 'o', 'g', 'r', 'a', 'm', ' ', 'F', 'i', 'l', 'e', 's', ' ', '(', 'x', '8', '6', ')', '\\', 'G', 'o', 'o', 'g', 'l', 'e', '\\', 'C', 'h', 'r', 'o', 'm', 'e', '\\', 'A', 'p', 'p', 'l', 'i', 'c', 'a', 't', 'i', 'o', 'n', '\"', ' ', '\"', 'c', 'h', 'r', 'o', 'm', 'e', '.', 'e', 'x', 'e', '\"', ' ', '\"' };
+	char radBuf[332]{ 's', 't', 'a', 'r', 't', ' ', '\"', 'C', ':', '/', 'P', 'r', 'o', 'g', 'r', 'a', 'm', ' ', 'F', 'i', 'l', 'e', 's', ' ', '(', 'x', '8', '6', ')', '/', 'G', 'o', 'o', 'g', 'l', 'e', '/', 'C', 'h', 'r', 'o', 'm', 'e', '/', 'A', 'p', 'p', 'l', 'i', 'c', 'a', 't', 'i', 'o', 'n', '\"', ' ', '\"', 'c', 'h', 'r', 'o', 'm', 'e', '.', 'e', 'x', 'e', '\"', ' ', '\"' };
 };
 
 extern mainThreadCls* threadCls;

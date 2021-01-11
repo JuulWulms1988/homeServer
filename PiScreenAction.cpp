@@ -1,6 +1,6 @@
 #include "PiScreen.h"
 
-void piScreenCls::connectF(unsigned __int8 a) {
+void piScreenCls::connectF(uint8_t a) {
 	screenObjS* p = &screenObj[a];
 	p->sockConMut.lock_shared();
 	if (((a && !p->type) || !a) && !p->connected) { 
@@ -12,7 +12,7 @@ void piScreenCls::connectF(unsigned __int8 a) {
 		bool ssS; statMut.lock_shared(), ssS = screenObj[0].stat, statMut.unlock_shared();
 		p->sendPrep(a + (ssS && [&] { bool UuU; screenObj[0].sockConMut.lock_shared(); UuU = screenObj[0].connected; screenObj[0].sockConMut.unlock_shared(); return UuU; }()) * 256);
 		if (!a) {
-			for (unsigned __int8 t = 1, m = clientCnt + 1; t < m; t++) {
+			for (uint8_t t = 1, m = clientCnt + 1; t < m; t++) {
 				(p = &screenObj[t])->sockConMut.lock_shared();
 				if (p->type == 1 && (p->connected || p->stat)) soundF(*p);
 				else if (p->type != 1 && p->connected) p->sendPrep(t + (ssS * 1) * 256), p->sockConMut.unlock_shared();
@@ -22,7 +22,7 @@ void piScreenCls::connectF(unsigned __int8 a) {
 	}
 }
 
-void piScreenCls::statF(bool s, unsigned __int8 a) {
+void piScreenCls::statF(bool s, uint8_t a) {
 	screenObjS* p = &screenObj[a];
 	p->sockConMut.lock();
 	if (p->stat != s) {
@@ -32,7 +32,7 @@ void piScreenCls::statF(bool s, unsigned __int8 a) {
 		if (a && ((s && !statCnt++) || (!s && !--statCnt))) {
 			statMut.unlock(), p->sockConMut.unlock();
 			serverIO(s);
-			for (unsigned __int8 t = 1, m = clientCnt + 1; t < m; t++) 
+			for (uint8_t t = 1, m = clientCnt + 1; t < m; t++) 
 				if (screenObj[t].type == 1 && t != a) {
 					screenObjS& P = screenObj[t];
 					P.sockConMut.lock_shared();
@@ -47,15 +47,15 @@ void piScreenCls::statF(bool s, unsigned __int8 a) {
 	else p->sockConMut.unlock();
 }
 
-void mainThreadCls::piScreenOffSluis(unsigned __int16 ad) {
+void mainThreadCls::piScreenOffSluis(uint16_t ad) {
 	piScreenC.sluisSend(512 + ad, ad);
 }
 
-void piScreenCls::sluisSend(unsigned __int16 s, unsigned __int16 f) {
+void piScreenCls::sluisSend(uint16_t s, uint16_t f) {
 	screenObj[f].sendPrep(s);
 }
 
-void piScreenCls::screenObjS::sendPrep(unsigned __int16 s) {
+void piScreenCls::screenObjS::sendPrep(uint16_t s) {
 	if (!sendMpCha.begin(s)) return;
 	threadBufCls::recStruct{ telnetS.tMut, [](void* pMCh, void* p) {
 		do ((screenObjS*)p)->send(((mainThreadCls::strMpCha*)pMCh)->p); while (!((mainThreadCls::strMpCha*)pMCh)->end());
@@ -66,7 +66,7 @@ void mainThreadCls::radioStr::connSoundPiF(bool x) {
 	piScreenCls::screenObjS* p = piScreenC.screenObj;
 	{
 		bool uit = true;
-		unsigned __int8 t = 0, m = piScreenC.clientCnt;
+		uint8_t t = 0, m = piScreenC.clientCnt;
 		while (t++ < m && ((++p)->type != 1 || (uit = false)));
 		if (uit) return;
 	}
@@ -86,7 +86,7 @@ void mainThreadCls::clsExMes::strExec::piScreenF() {
 	if (str[4] == 'A' && str[5] == 'N') {
 		system("wolcmd 001b38d54f0d 192.168.180.30 255.255.255.0");
 		if (!piScreenC.wakeOnLanF()) return;
-		unsigned __int8 ad = point->pLisHome->adrs.load();
+		uint8_t ad = point->pLisHome->adrs.load();
 		if (ad == 255) return;
 		strncpy_s(ls, 4, "@PS", 3), ls[3] = ad / 10 + '0', ls[4] = ad % 10 + '0';
 		strncpy_s(ls + 5, 6, "CA00+", 5);

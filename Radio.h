@@ -7,17 +7,17 @@ class mainThreadCls::radioStr {
 public:
 	void open();
 	shared_mutex varMut;
-	unsigned __int8 chan = 0;
-	unsigned __int8 chanCnt = 0;
+	uint8_t chan = 0;
+	uint8_t chanCnt = 0;
 	char*  getF(char* x);
-	void pass(unsigned __int16 x, unsigned __int8 ad);
+	void pass(uint16_t x, uint8_t ad);
 private:
 	struct passStatStr;
 	bool play = false;
 	mutex passMut[100];
-	void func(unsigned __int16 x);
-	void playF(unsigned __int8 x, unsigned __int8 old);
-	void playPrep(unsigned __int8 x, unsigned __int8 old);
+	void func(uint16_t x);
+	void playF(uint8_t x, uint8_t old);
+	void playPrep(uint8_t x, uint8_t old);
 	mutex threadMut;
 	strMpCha passMpCha;
 	strMpCha MpCha;
@@ -28,10 +28,10 @@ private:
 };
 
 struct mainThreadCls::radioStr::passStatStr {
-	unsigned __int8 type;
+	uint8_t type;
 	strMpCha MpCha;
-	void pass(unsigned __int16 x);
-	void func(unsigned __int16 x);
+	void pass(uint16_t x);
+	void func(uint16_t x);
 	char* ls;
-	__int8 lsNo = radioS.strS->get(ls);
+	int8_t lsNo = radioS.strS->get(ls);
 };

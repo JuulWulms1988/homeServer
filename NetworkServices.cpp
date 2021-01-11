@@ -1,6 +1,9 @@
-#include "StdAfx.h"
+#ifdef _WIN32
+#include "../stdafx.h"
+#endif
+
 #include "NetworkServices.h"
-#include <string>
+#include "Custom/custom_string.h"
 using namespace std;
 
 int NetworkServices::sendMessage(SOCKET curSocket, char * message, int messageSize)

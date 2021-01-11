@@ -13,24 +13,24 @@ namespace udpImplementation {
 				setAddr(x, 1236, printIp);
 				bind(serverSocket, (sockaddr*)&x, sizeof(x));
 			}
-			printIp[12] = '3', printIp[13] = '1', printIp[10] = '8';
-			setAddr(ClientAddr2, 1235, printIp);
+			//printIp[12] = '3', printIp[13] = '1', printIp[10] = '8';
+			//setAddr(ClientAddr2, 1235, printIp);
 		}
 
 		void send(char* buf, int len) {
 			udpBasCls::send(buf, len, ClientAddr);
-			udpBasCls::send(buf, len, ClientAddr2);
+			//udpBasCls::send(buf, len, ClientAddr2);
 		}
 
 		unsigned int receive(char* buffer, unsigned int length) {
-			sockaddr_in x{ 0 }; int si = sizeof(x), r;
-			while (r = recvfrom(serverSocket, buffer, length, 0, (SOCKADDR*)&x, &si) < 1);
+			sockaddr_in x{ 0 }; socklen_t si = sizeof(x), r;
+			while (r = recvfrom(serverSocket, buffer, length, 0, (sockaddr*)&x, &si) < 1);
 			return (unsigned int)r;
 		}
 
 	private:
 		struct sockaddr_in ClientAddr;
-		struct sockaddr_in ClientAddr2;
+		//struct sockaddr_in ClientAddr2;
 	} static udp;
 
 	void send(char* buf, int len) {

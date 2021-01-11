@@ -1,6 +1,8 @@
 #pragma once
+
 #include "ServerTelnet.h"
 #include "threadCls.h"
+
 struct telnetStr;
 
 extern telnetStr& telnetS;
@@ -19,20 +21,19 @@ struct telnetStr {
 		fl = false;
 		threadBufCls::recStruct{ tMut, [](void* s, void* p) {
 			SOCKET S = *(SOCKET*)(s);
-			if (!telnetS.deLock(S).receiveFromClients(S)) telnetS.rmAdArF(S), closesocket(S);
+			if (!telnetS.deLock(S).receiveFromClients(S)) telnetS.rmAdArF(S), _SOCK_CLOSE_F(S);
 		} }.start(&s, NULL);
-		cv.wait(unique_lock<mutex>(mut), [&] { return fl; });
+		unique_lock<mutex>lk(mut); 
+		cv.wait(lk, [&] { return fl; });
 	}
-	unsigned __int8 chkAdCnt = 0;
+	uint8_t chkAdCnt = 0;
 	mutex chkAdMut;
 	struct chkAdStr {
 		SOCKET s;
-		unsigned __int8 min;
+		uint8_t min;
 	} chkAdAr[256];
-	map<SOCKET, unsigned __int8> chkAdMp;
-	bool rmAdAr(unsigned __int8 n) { chkAdCnt--; while (n < chkAdCnt) chkAdAr[n] = chkAdAr[n + 1], n++; return true; }
+	map<SOCKET, uint8_t> chkAdMp;
+	bool rmAdAr(uint8_t n) { chkAdCnt--; while (n < chkAdCnt) chkAdAr[n] = chkAdAr[n + 1], n++; return true; }
 	
-	void checkAdr(unsigned __int8 min);
+	void checkAdr(uint8_t min);
 };
-
-

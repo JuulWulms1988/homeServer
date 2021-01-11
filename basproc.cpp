@@ -1,5 +1,5 @@
 #include "basproc.h"
-#include <string>
+#include "Custom/custom_string.h"
 
 char* strbasprc::charPHeap(char* x, unsigned int len, unsigned int& vloc , unsigned int fac, unsigned int& vTLen) {
 	char* y = new char[len + 1];
@@ -9,13 +9,13 @@ char* strbasprc::charPHeap(char* x, unsigned int len, unsigned int& vloc , unsig
 }
 
 char* strbasprc::charPHeapVgDel(char* del, unsigned long& len, char* voeg, unsigned int& vloc, unsigned int vlen, unsigned int fac, unsigned int& vTLen) {
-	char* x = new char[len + vlen + 1]; for (unsigned long t = 0; t < len; t++) x[t] = del[t]; delete[len + 1] del; 
+	char* x = new char[len + vlen + 1]; for (unsigned long t = 0; t < len; t++) x[t] = del[t]; delete[] del; 
 	for (unsigned int t = 0; t < vlen; (vloc += 1) %= fac) x[len + t++] = voeg[vloc]; x[(len += vlen)] = '\0';
 	if ((vTLen -= vlen) < vloc) for (unsigned int t = 0; t < vTLen || (vloc = 0); t++) voeg[t] = voeg[vloc + t];
 	return x;
 }
 
-bool strbasprc::vergCharP(char* x, char* y) {
+bool strbasprc::vergCharP(const char* x, const char* y) {
 	unsigned int z = charPLen(x); 
 	
 	if (z != charPLen(y)) return false; for (unsigned int t = 0; t < z; t++) if (x[t] != y[t]) return false;
@@ -28,13 +28,19 @@ char* strbasprc::remCommCharP(char* x) {
 	return x;
 }
 
-bool strbasprc::vergCharPH(char* x, char* y) {
+bool strbasprc::vergCharPH(const char* x, const char* y) {
 	unsigned int z = charPLen(x);
 	if (z != charPLen(y)) return false; for (unsigned int t = 0; t < z; t++) if (!hfdLttr(x[t], y[t])) return false;
 	return true;
 }
 
-unsigned int strbasprc::charPLen(char* x) {
+bool strbasprc::vergCharPH_path(const char* x, const char* y) {
+	unsigned int z = charPLen(x);
+	if (z != indChar('/', y)) return false; for (unsigned int t = 0; t < z; t++) if (!hfdLttr(x[t], y[t])) return false;
+	return true;
+}
+
+unsigned int strbasprc::charPLen(const char* x) {
 	unsigned int tel = 0; 
 	while 
 		(x[tel] != '\0') 
@@ -48,7 +54,7 @@ char* strbasprc::charPvoeg(char* x, char* voeg) {
 	return x;
 }
 
-unsigned int strbasprc::charPVI(char* x, char* voeg) {
+unsigned int strbasprc::charPVI(char* x, const char* voeg) {
 	unsigned int y = charPLen(voeg), z = charPLen(x);
 	strncpy_s(x + z, y + 1, voeg, y);
 	return z + y;
@@ -71,7 +77,7 @@ char* strbasprc::charPLsR(char* bf, char* fl, unsigned long& cnt) {
 	int x = indChar('\n', fl + cnt), 
 		y = indChar('\r', fl + cnt); 
 	if (y != -1) if (x != -1) if (x > y && (flag = true)) Cnt = y; else Cnt = x; else Cnt = y; else if (x != -1) Cnt = x; else { flag2 = true, Cnt = indChar('\0', fl + cnt); }
-	strncpy_s(bf, Cnt + 1, fl + cnt, Cnt); unsigned __int8 tt = 0; if (flag && fl[cnt + Cnt + 1] == '\n') tt = 2; else if (!flag2) tt = 1;
+	strncpy_s(bf, Cnt + 1, fl + cnt, Cnt); uint8_t tt = 0; if (flag && fl[cnt + Cnt + 1] == '\n') tt = 2; else if (!flag2) tt = 1;
 	cnt += Cnt + tt; return bf;
 }
 
@@ -92,12 +98,12 @@ char* strbasprc::charPLsDR(unsigned int rlNo, char* bf, char* fl, unsigned long&
 	}
 	int x = indChar('\n', fl + cnt), y = indChar('\r', fl + cnt);
 	if (y != -1) if (x != -1) if (x > y && (flag = true)) Cnt = y; else Cnt = x; else Cnt = y; else if (x != -1) Cnt = x; else { flag2 = true, Cnt = indChar('\0', fl + cnt); }
-	strncpy_s(bf, Cnt + 1, fl + cnt, Cnt); unsigned __int8 tt = 0; if (flag && fl[cnt + Cnt + 1] == '\n') tt = 2; else if (!flag2) tt = 1;
+	strncpy_s(bf, Cnt + 1, fl + cnt, Cnt); uint8_t tt = 0; if (flag && fl[cnt + Cnt + 1] == '\n') tt = 2; else if (!flag2) tt = 1;
 	cnt += Cnt + tt; 
 	return bf;
 }
 
-int strbasprc::indChar(char x, char* y) {
+int strbasprc::indChar(char x, const char* y) {
 	for (unsigned int tel = 0, max = charPLen(y); tel < max || x == '\0'; tel++) if (x == y[tel]) return tel; return -1;
 }
 
@@ -166,9 +172,9 @@ bool strbasprc::hfdlttr_pp(char* devar, char* letter) {
 
 
 
-bool strbasprc::verg8(char* een, unsigned int* eenlen, char* twee, unsigned __int8* tweelen, bool&& hfd) {
+bool strbasprc::verg8(char* een, unsigned int* eenlen, char* twee, uint8_t* tweelen, bool&& hfd) {
 	if (*eenlen == *tweelen) {
-		for (unsigned __int8 tel = 0; tel < *eenlen; tel++) {
+		for (uint8_t tel = 0; tel < *eenlen; tel++) {
 			if (hfd) {
 				if (!hfdlttr_pp(een + tel, twee + tel)) {
 					return 0;
@@ -186,7 +192,7 @@ bool strbasprc::verg8(char* een, unsigned int* eenlen, char* twee, unsigned __in
 }
 
 char strbasprc::cv16char0(unsigned int& waarde) {
-	unsigned __int8 reken = waarde / 16;
+	uint8_t reken = waarde / 16;
 	if (reken >= 10) {
 		return reken - 10 + 'a';
 	}
@@ -196,7 +202,7 @@ char strbasprc::cv16char0(unsigned int& waarde) {
 }
 
 char strbasprc::cv16char1(unsigned int& waarde) {
-	unsigned __int8 reken = waarde % 16;
+	uint8_t reken = waarde % 16;
 	if (reken >= 10) {
 		return reken - 10 + 'a';
 	}
@@ -205,8 +211,8 @@ char strbasprc::cv16char1(unsigned int& waarde) {
 	}
 }
 
-unsigned __int8 strbasprc::cv16waarde(char* char0) {
-	unsigned __int8 uitkomst;
+uint8_t strbasprc::cv16waarde(char* char0) {
+	uint8_t uitkomst;
 	if (*(char0 + 1) >= 'a' && *(char0 + 1) <= 'f') {
 		uitkomst = 10 + (*(char0 + 1) - 'a');
 	}
@@ -222,7 +228,7 @@ unsigned __int8 strbasprc::cv16waarde(char* char0) {
 	return uitkomst;
 }
 
-unsigned int strbasprc::cvcharlngth(unsigned __int8 stelsel, unsigned long getal, char* stuur) {
+unsigned int strbasprc::cvcharlngth(uint8_t stelsel, unsigned long getal, char* stuur) {
 	unsigned int dec = 0;
 	{
 		unsigned long x = getal;
@@ -236,15 +242,15 @@ unsigned int strbasprc::cvcharlngth(unsigned __int8 stelsel, unsigned long getal
 	return dec;
 }
 
-unsigned long strbasprc::macht(unsigned __int8 stelsel, unsigned int demacht) {
+unsigned long strbasprc::macht(uint8_t stelsel, unsigned int demacht) {
 	unsigned long uitkomst = 1;
-	for (unsigned __int8 ttl = 0; ttl < demacht; ttl++) {
+	for (uint8_t ttl = 0; ttl < demacht; ttl++) {
 		uitkomst = uitkomst * stelsel;
 	}
 	return uitkomst;
 }
 
-char strbasprc::cvintcharchar(unsigned __int8 aant) {
+char strbasprc::cvintcharchar(uint8_t aant) {
 	if (aant < 10) {
 		return aant + '0';
 	}

@@ -6,7 +6,7 @@
 bool clsNSite::func::stwzStream(bool type, char* nGet, int nLen) {
 	if (!type || nLen < 3 || nGet[0] != 'z' || nGet[1] != 'z') {
 		if (nLen != 2 || [&] { for (char t = 0, x = nGet[0]; t < 2; x = nGet[++t]) if (!(x >= '0' && x <= '9') && !(x >= 'A' && x <= 'Z') && !(x >= 'a' && x <= 'x')) return true; return false; }()) return false;
-		unsigned __int8 noV = strbasprc::cvintcharStr(nGet);
+		uint8_t noV = strbasprc::cvintcharStr(nGet);
 		if (type) 
 			if (noV > piScreenC.chanCnt) return false;
 			else if (!noV) piScreenC.playF(1, 99);
@@ -23,7 +23,7 @@ void clsNSite::func::voegStream() {
 	voeg("web.vSTR(false, \'", 17);
 	voeg(radioS.getF(buf), 2);
 	voeg("\', [\'-\'", 7); 
-	if (!fileObj.open("Radio\\set.txt")) return; 
+	if (!fileObj.open("Radio/Set.txt")) return; 
 	{ 
 		unsigned int l;
 		if (l = strbasprc::charPLen(strbasprc::charPLsR(buf, fileObj.file, fileObj.loc)))

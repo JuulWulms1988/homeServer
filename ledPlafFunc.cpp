@@ -9,7 +9,7 @@ bool mainThreadCls::clsLedPl::clsLedPlObj::ledPlFunc(strSndV s) {
 	else if (*str == 'R') {
 		empPsMsPr(); 
 		str++; int L = s.len - 1, Loc; char bufL = '@';
-		for (unsigned __int8 t = 0; t < 6; t++) {
+		for (uint8_t t = 0; t < 6; t++) {
 			bufL = str[L], str[L] = '\0';
 			if ((Loc = strbasprc::indChar('\\', str)) != -1) str[Loc] = '\0', str[L] = bufL, bufL = '@';
 			unsigned long uit = strbasprc::cvintcharStr(str); bool flag = false; switch (t) {
@@ -23,7 +23,7 @@ bool mainThreadCls::clsLedPl::clsLedPlObj::ledPlFunc(strSndV s) {
 		} s.ret(), reqFunc();
 	}
 	else if (*str == 'L' && str[1] == 'P') {
-		for (unsigned __int8 t = 1, m = (s.len -= 1) - 2; t < m || (str[m++] = '\n' && !(str[m] = '+')); t++) str[t] = str[t + 3]; *str = '&', psMsPr2(s);
+		for (uint8_t t = 1, m = (s.len -= 1) - 2; t < m || (str[m++] = '\n' && !(str[m] = '+')); t++) str[t] = str[t + 3]; *str = '&', psMsPr2(s);
 	}
 	else if (*str == 'P') {
 		char* ls = sndS.pack;
@@ -35,16 +35,16 @@ bool mainThreadCls::clsLedPl::clsLedPlObj::ledPlFunc(strSndV s) {
 			mutPoint.unlock();
 			}
 		//= (char*)strbasprc::cvintcharStr(str + 1); rd += strbasprc::cvintcharStr(str + strbasprc::charPLen(str) + 1);
-		unsigned int tel = 1, Next = 0; char Now; unsigned __int8 Bron, pC; __int8 zetAant; for (unsigned __int8 t = 0; t < stripCnt; t++) gezet[t] = false;
+		unsigned int tel = 1, Next = 0; char Now; uint8_t Bron, pC; int8_t zetAant; for (uint8_t t = 0; t < stripCnt; t++) gezet[t] = false;
 		for (char thisC = *rd;
 			thisC != '\r' && thisC != '\n'; thisC = rd[tel++]) { ls[tel] = thisC; 
 		if (!Next && tel < 4)
 			switch (tel) {
 			case 1: gezet[Bron = strbasprc::cvintcharint(thisC)] = true, zetAant = 1; break;
-			case 2: if ((Now = thisC) != 'S') { for (unsigned __int8 t = 0; t < Bron; t++) if (var[Bron].parChldAr[t]) { Bron = t; break; } }
+			case 2: if ((Now = thisC) != 'S') { for (uint8_t t = 0; t < Bron; t++) if (var[Bron].parChldAr[t]) { Bron = t; break; } }
 					else varMut.lock(); remChld(Bron); // OPLETTEN MET MUTEX!
 					break;
-			case 3: if (Now == 'S') *ls = '$', pC = strbasprc::cvintcharint(thisC), Next = 5; else if ((Next = 3) && Bron < stripCnt - 1) for (unsigned __int8 t = Bron + 1; t < stripCnt; t++) if (var[Bron].parChldAr[t]) gezet[t] = true, pC = zetAant++; zetAant *= -1; break;
+			case 3: if (Now == 'S') *ls = '$', pC = strbasprc::cvintcharint(thisC), Next = 5; else if ((Next = 3) && Bron < stripCnt - 1) for (uint8_t t = Bron + 1; t < stripCnt; t++) if (var[Bron].parChldAr[t]) gezet[t] = true, pC = zetAant++; zetAant *= -1; break;
 			}
 		else if (Next)
 			if (tel != Next) continue;
@@ -55,21 +55,21 @@ bool mainThreadCls::clsLedPl::clsLedPlObj::ledPlFunc(strSndV s) {
 					char X = strbasprc::cvintcharint(thisC); gezet[X] = true, Next += 2; if (Now == 'S') { remChld(X); if (pC != zetAant++) continue; }
 					else { zetAant++; continue; }
 				}
-				for (unsigned __int8 t = 0, m = LEDPL_VARAANT2 + 40; (t == LEDPL_VARAANT && (t = 20)) || (t == LEDPL_VARAANT1 + 20 && (t = 40)) || t < m; t++)
+				for (uint8_t t = 0, m = LEDPL_VARAANT2 + 40; (t == LEDPL_VARAANT && (t = 20)) || (t == LEDPL_VARAANT1 + 20 && (t = 40)) || t < m; t++)
 					setVal(t, 0, zetAant);
-				for (unsigned __int8 tt, tt2 = tt = 0; tt2 < zetAant; tt++)
+				for (uint8_t tt, tt2 = tt = 0; tt2 < zetAant; tt++)
 					if (!gezet[tt]) continue; else tt2++, var[tt].parChld = zetAant;
-				for (unsigned __int8 t = 0; t < stripCnt; t++)
-					for (unsigned __int8 tt, tt2 = tt = 0; tt2 < zetAant; tt++)
+				for (uint8_t t = 0; t < stripCnt; t++)
+					for (uint8_t tt, tt2 = tt = 0; tt2 < zetAant; tt++)
 						if (!gezet[tt]) continue; else tt2++, var[tt].parChldAr[t] = gezet[t];
 				if (!flag) tel--;
 			}
 			else {
-				unsigned __int8 loc = 0; char Buf;
+				uint8_t loc = 0; char Buf;
 				while ((Buf = rd[tel + loc++]) != '_' && Buf != '\r' && Buf != '\n'); rd[tel + loc - 1] = '\0';
 				switch (Now) {
 				case 'S':
-					unsigned __int8 vr = strbasprc::cvintcharint(thisC); setVal(vr, strbasprc::cvintcharStr(rd + tel), zetAant); break;
+					uint8_t vr = strbasprc::cvintcharint(thisC); setVal(vr, strbasprc::cvintcharStr(rd + tel), zetAant); break;
 				} if (Buf == '_') Next = tel + loc + 1; else Next = 0; rd[tel + loc - 1] = Buf;
 			}
 		} if (Now == 'S') varMut.unlock(); ls[tel++] = '\n';
@@ -86,12 +86,12 @@ bool mainThreadCls::clsLedPl::clsLedPlObj::ledPlFunc(strSndV s) {
 void mainThreadCls::clsLedPl::clsLedPlObj::reqFunc() {
 	char*& ls = sndS.pack; int& lsLen = sndS.len = 0;
 	bool eerst = false;
-	for (unsigned __int8 t = 0; t < stripCnt; t++) gezet[t] = false;
-	for (unsigned __int8 tt = 0; tt < stripCnt; tt++) if (gezet[tt]) continue; 
+	for (uint8_t t = 0; t < stripCnt; t++) gezet[t] = false;
+	for (uint8_t tt = 0; tt < stripCnt; tt++) if (gezet[tt]) continue; 
 	else {
-		bool zet = false; varStr& p = var[tt]; unsigned __int8 zet0 = p.parChld - 1;
+		bool zet = false; varStr& p = var[tt]; uint8_t zet0 = p.parChld - 1;
 		unsigned int w; 
-		for (unsigned __int8 t = 0, m = LEDPL_VARAANT2 + 40; (t == LEDPL_VARAANT && (t = 20)) || (t == LEDPL_VARAANT1 + 20 && (t = 40)) || t < m; t++) 
+		for (uint8_t t = 0, m = LEDPL_VARAANT2 + 40; (t == LEDPL_VARAANT && (t = 20)) || (t == LEDPL_VARAANT1 + 20 && (t = 40)) || t < m; t++) 
 			if (!(w = p.val(t))) continue;
 			else {
 				if (!zet) {
@@ -108,20 +108,19 @@ void mainThreadCls::clsLedPl::clsLedPlObj::reqFunc() {
 	if (!eerst) *ls = '#', ls[1] = '+', lsLen = 2, psMsPr();
 }
 
-unsigned int mainThreadCls::clsLedPl::clsLedPlObj::varStr::val(unsigned __int8 x) {
-	//cout << "lees: " << (int)x << "\n";
+unsigned int mainThreadCls::clsLedPl::clsLedPlObj::varStr::val(uint8_t x) {
 	switch (x) {
 	case 0: return helder; case 1: return rgbPauze; case 2: return negDlay * 1; case 3: return gamDlay;
 	case 4: return negGamDlay * 1; case 5: return gamPer; case 6: return gamClr;
 	case 7: return gamVal; case 8: return gamIVal; case 9: return gamIHel;
 	case 10: return helDlay; case 11: return negHelCur * 1; case 12: return gamPauze;
 	case 13: return helAmp; case 20: return dlay; case 21: return gamInterval;
-	case 22: return helPer; case 23: return per; case 40: return randVar;
+	case 22: return helPer; case 23: return per; case 40: return randVar; default: return 0; 
 	}
 }
 
-void mainThreadCls::clsLedPl::clsLedPlObj::setVal(unsigned __int8 n, unsigned long v, unsigned __int8 c) {
-	for (unsigned __int8 t, t2 = t = 0; t2 < c; t++) {
+void mainThreadCls::clsLedPl::clsLedPlObj::setVal(uint8_t n, unsigned long v, uint8_t c) {
+	for (uint8_t t, t2 = t = 0; t2 < c; t++) {
 		if (!gezet[t]) continue; t2++;
 		switch (n) {
 		case 0: var[t].helder = v; break; case 1: var[t].rgbPauze = v; break; case 2: var[t].negDlay = v * true; break;
@@ -138,7 +137,7 @@ void mainThreadCls::clsLedPl::clsLedPlObj::setVal(unsigned __int8 n, unsigned lo
 void mainThreadCls::clsLedPl::clsLedPlObj::varFunc(char* xLs, int xLen) {
 	char*& yLs = sndS.pack; int& yLen = sndS.len;
 	{
-		unsigned __int8 x = (xLs[1] - '0') * 10 + (xLs[2] - '0'), y = (xLs[3] - '0') * 10 + (xLs[4] - '0');
+		uint8_t x = (xLs[1] - '0') * 10 + (xLs[2] - '0'), y = (xLs[3] - '0') * 10 + (xLs[4] - '0');
 		yLs[1] = strbasprc::cvintcharchar(x), yLs[2] = 'V';
 		yLen = 3 + strbasprc::cvcharlngth(60, y, yLs + 3);
 		if (varSFunc(x, y, strbasprc::cvintcharStr(xLs + 6))) *yLs = '$'; else *yLs = '&';
@@ -151,14 +150,14 @@ void mainThreadCls::clsLedPl::clsLedPlObj::varFunc(char* xLs, int xLen) {
 }
 
 
-bool mainThreadCls::clsLedPl::clsLedPlObj::varSFunc(unsigned __int8 noStr, unsigned __int8 noVal, unsigned long wVal) {
+bool mainThreadCls::clsLedPl::clsLedPlObj::varSFunc(uint8_t noStr, uint8_t noVal, unsigned long wVal) {
 	bool uit; if (noVal > 19) uit = true; else uit = false;
 	varMut.lock();
 	varStr& p = var[noStr];
 	{
 		bool* ar = p.parChldAr;
-		for (unsigned __int8 t = 0; t < stripCnt; t++) gezet[t] = ar[t];
-	} unsigned __int8 max = p.parChld;
+		for (uint8_t t = 0; t < stripCnt; t++) gezet[t] = ar[t];
+	} uint8_t max = p.parChld;
 	setVal(noVal, wVal, max);
 	switch (noVal) {
 	case 5: //gamPer -> per
@@ -177,10 +176,10 @@ bool mainThreadCls::clsLedPl::clsLedPlObj::varSFunc(unsigned __int8 noStr, unsig
 	return uit;
 }
 /*
-unsigned long mainThreadCls::clsLedPl::clsLedPlObj::varSFuncR(unsigned long waarde, unsigned __int8 meer) {
-	auto prF = [](unsigned __int8 x, unsigned long& w) { if (x < 8) w = (x / 2) * 25 + x % 2 * 13; else if (x < 37) w = (x - 7) * 100; else if (x < 41) w = (x - 33) * 750; else w = (x - 40) * 6000; };
+unsigned long mainThreadCls::clsLedPl::clsLedPlObj::varSFuncR(unsigned long waarde, uint8_t meer) {
+	auto prF = [](uint8_t x, unsigned long& w) { if (x < 8) w = (x / 2) * 25 + x % 2 * 13; else if (x < 37) w = (x - 7) * 100; else if (x < 41) w = (x - 33) * 750; else w = (x - 40) * 6000; };
 	unsigned long uit, uit2 = 0;
-	for (unsigned __int8 t = 1; t < 52; t++) {
+	for (uint8_t t = 1; t < 52; t++) {
 		uit = uit2, prF(t, uit2);
 		if (uit2 > waarde)
 		{

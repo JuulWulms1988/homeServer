@@ -1,11 +1,14 @@
-#include "StdAfx.h"
+#ifdef _WIN32
+#include "../stdafx.h"
+#endif
 #include "ServerintNetwork.h"
 #include <iostream>
 
 
 ServerintNetwork::ServerintNetwork(void)
 {
-	// create WSADATA object
+	#ifdef _WIN32
+    // create WSADATA object
     WSADATA wsaData;
 
     // our sockets for the server
@@ -21,7 +24,8 @@ ServerintNetwork::ServerintNetwork(void)
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
-       exit(1);
+        printf("WSAStartup failed with error: %d\n", iResult);
+        exit(1);
     }
 
     // set address information
@@ -35,6 +39,7 @@ ServerintNetwork::ServerintNetwork(void)
     iResult = getaddrinfo(NULL, "10004", &hints, &result);
 
     if ( iResult != 0 ) {
+        printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
         exit(1);
     }
@@ -43,17 +48,19 @@ ServerintNetwork::ServerintNetwork(void)
     ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 
     if (ListenSocket == INVALID_SOCKET) {
+        printf("socket failed with error: %ld\n", WSAGetLastError());
         freeaddrinfo(result);
         WSACleanup();
         exit(1);
     }
 
     // Set the mode of the socket to be nonblocking
-   // u_long iMode = 0;
-   // iResult = ioctlsocket(ListenSocket, FIONBIO, &iMode);
+    u_long iMode = 0;
+    iResult = ioctlsocket(ListenSocket, FIONBIO, &iMode);
 
     if (iResult == SOCKET_ERROR) {
-        closesocket(ListenSocket);
+        printf("ioctlsocket failed with error: %d\n", WSAGetLastError());
+        _SOCK_CLOSE_F(ListenSocket);
         WSACleanup();
         exit(1);
     }
@@ -62,8 +69,9 @@ ServerintNetwork::ServerintNetwork(void)
     iResult = bind( ListenSocket, result->ai_addr, (int)result->ai_addrlen);
 
     if (iResult == SOCKET_ERROR) {
+        printf("bind failed with error: %d\n", WSAGetLastError());
         freeaddrinfo(result);
-        closesocket(ListenSocket);
+        _SOCK_CLOSE_F(ListenSocket);
         WSACleanup();
         exit(1);
     }
@@ -75,10 +83,29 @@ ServerintNetwork::ServerintNetwork(void)
     iResult = listen(ListenSocket, SOMAXCONN);
 
     if (iResult == SOCKET_ERROR) {
-        closesocket(ListenSocket);
+        printf("listen failed with error: %d\n", WSAGetLastError());
+        _SOCK_CLOSE_F(ListenSocket);
         WSACleanup();
         exit(1);
     }
+    #endif
+
+    #ifndef _WIN32
+    struct sockaddr_in hints;
+    memset(&hints, '\0', sizeof(struct sockaddr_in));
+    ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (ListenSocket < 0) exit(1);
+      int opt = 1;
+    if (setsockopt(ListenSocket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 
+    &opt, sizeof(opt))) exit(1);
+    hints.sin_family = AF_INET;
+    hints.sin_addr.s_addr = INADDR_ANY;
+    hints.sin_port = htons(10004);
+    if (bind(ListenSocket, (struct sockaddr *) &hints, sizeof(hints)) < 0) 
+        _SOCK_CLOSE_F(ListenSocket), exit(1);
+    if (listen(ListenSocket,128) < 0)
+        _SOCK_CLOSE_F(ListenSocket), exit(1);
+    #endif
 }
 
 
@@ -92,12 +119,14 @@ void ServerintNetwork::acceptNewClient()
 	while (true) {
 		// if client waiting, accept the connection and save the socket
 		ClientSocket = accept(ListenSocket, NULL, NULL);
-		if (ClientSocket == INVALID_SOCKET) continue;
-
-		//disable nagle on the client's socket
-		char value = 1;
+		if (_SOCK_ENUM_COMP(ClientSocket, INVALID_SOCKET)) continue;
+		
+        #ifdef _WIN32
+        char value = 1;
+      
 		setsockopt(ClientSocket, IPPROTO_TCP, TCP_NODELAY, &value, sizeof(value));
-		// insert new client into session id tab
+       #endif
+
 		accF();
 	}
 }
@@ -106,7 +135,7 @@ void ServerintNetwork::leegmap(const unsigned int* id) {
 	std::map<unsigned int, unsigned int>::iterator itt = reqlen.find(*id);
 	if (itt != reqlen.end() && itt->second > 0) {
 		std::map<unsigned int, char*>::iterator it = req.find(*id);
-		delete[itt->second + 1] it->second;
+		delete[] it->second;
 	}
 	if (blank.find(*id) != blank.end()) {
 		blank.erase(blank.find(*id));
@@ -129,56 +158,5 @@ void ServerintNetwork::maakmap(const unsigned int* id){
 	reqlen.insert(pair<unsigned int, unsigned int>(*id, 0));
 }
 
-int ServerintNetwork::receiveData(const unsigned int * client_id, char * recvbuf)
-{
-	if (sessions.find(*client_id) != sessions.end())
-		{
-		SOCKET currentSocket = sessions[*client_id];
-		for (int tel = 0; tel < 20; tel++) {
-			iResult = NetworkServices::receiveMessage(currentSocket, recvbuf, 10000);
-			if (iResult > 0) {
-		//		for (int tol = 0; tol < iResult; tol++) {
-		//			cout << recvbuf[tol];
-		//		}
-		//		cout << "\n\nDeze lengte: " << iResult << "\n\n";
-			}
-			if (iResult == 0)
-		{
-			if (tel == 19) {
-				leegmap(client_id);
-				closesocket(currentSocket);
-			}
-		}
-		else {
-			break;
-		}
-	}
-        return iResult;
-	}
-    return 0;
-}
 
-void ServerintNetwork::sendTo(const unsigned int* id, char * bericht, unsigned int* len) {
-	std::map<unsigned int, SOCKET>::iterator iter;
-	int iSendResult;
-	iter = sessions.find(*id);
-	if (iter != sessions.end()) {
-		//for (unsigned int tel = 0; tel < *len; tel++) {
-		//	cout << *(bericht + tel);
-		//}
-	//	cout << "\nLengte: " << *len << "\n\n";
-		for (int tel = 0; tel < 20; tel++) {
-			iSendResult = NetworkServices::sendMessage(iter->second, bericht, *len);
-			if (iSendResult == SOCKET_ERROR)
-			{
-				if (tel == 19) {
-				closesocket(iter->second);
-				//leegmap(&iter->second);
-				}
-			}
-			else {
-				break;
-			}
-		}
-	}
-}
+

@@ -1,25 +1,29 @@
-// main.cpp : Defines the entry point for the console application.
-//
-// may need #include "stdafx.h" in visual studio
+
+#include <stdint.h>
+
 void* bootPtrAlg;
-// #include "ClientGame.h"
+
 #include <iostream>
-// used for multi-threading
+
 #include "nSite.h"
 #include "ThreadCls.h"
 #include "PiScreen.h"
 #include "Radio.h"
-#include "stdafx.h"
+
 #include "clstijd.h"
-#include "udpImplementation\\Implementation.hpp"
-memFileCls* fileData;
-mainThreadCls* threadCls;
+#include "udpImplementation/Implementation.hpp"
 
-char lsUsrCin[512]; 
-unsigned __int8 LEDPL_CNT = 0;
+#ifdef _WIN32
+#include "../stdafx.h"
 
+static inline void startKillF() {
+#ifdef _WIN32
+	for (char t = 0, *y[4/*5*/]{ /*"explorer.exe", */"start.exe", "chrome.exe", "cmd.exe", "vlc.exe" }; t < 4; t++)
+		mainThreadCls::killProc(y[t]);
+#endif
+}
 
-BOOL ctrl_handler(DWORD event)
+static inline BOOL ctrl_handler(DWORD event)
 {
 	if (event == CTRL_CLOSE_EVENT || event == CTRL_LOGOFF_EVENT || event == CTRL_SHUTDOWN_EVENT) {
 		extCls::end();
@@ -28,12 +32,33 @@ BOOL ctrl_handler(DWORD event)
 	return FALSE;
 }
 
+static inline void setCloseHandle() {
+	SetConsoleCtrlHandler((PHANDLER_ROUTINE)(ctrl_handler), TRUE);
+}
+
+#endif
+
+#ifndef _WIN32
+#include "stdio.h"
+static inline void startKillF() {}
+static inline void setCloseHandle() {
+
+}
+
+#endif
+
+
+memFileCls* fileData;
+mainThreadCls* threadCls;
+
+char lsUsrCin[512]; 
+uint8_t LEDPL_CNT = 0;
+
 
 int main()
 {
-	fileData = new memFileCls("Data");
-	for (char t = 0, *y[4/*5*/]{ /*"explorer.exe", */"start.exe", "chrome.exe", "cmd.exe", "vlc.exe" }; t < 4; t++)
-		mainThreadCls::killProc(y[t]);
+	{ char p[]{ 'D', 'a', 't', 'a', '\0' }; fileData = new memFileCls(p); }
+	startKillF();
 	stuurbericht();
 	p_clstijd->tijdupdate();
 	bootPtrAlg = new mainThreadCls::deBootStr;
@@ -41,22 +66,24 @@ int main()
 	radioS.open();
 	piScreenC.start();
 	
-	SetConsoleCtrlHandler((PHANDLER_ROUTINE)(ctrl_handler), TRUE);
+	setCloseHandle();
 
 	
 	thread([] { new clsNSite; }).detach();
 	{
 		strCv cv{ false };
 		thread([](strCv* cv) {
-			cv->cv.wait(unique_lock<mutex>(cv->mut), [&] { return cv->ready; }), cv->ready = false, cv->cv.notify_all();
+			{ unique_lock<mutex>lk(cv->mut); cv->cv.wait(lk, [&] { return cv->ready; }), cv->ready = false, cv->cv.notify_all(); }
 			telnetS.serv.update();
 		}, &cv).detach();
 		
 		((mainThreadCls::deBootStr*)bootPtrAlg)->mainF();
 
-		unique_lock<mutex>(cv.mut), cv.ready = true;
+		cv.mut.lock(); cv.ready = true; cv.mut.unlock();
 		cv.cv.notify_all();
-		cv.cv.wait(unique_lock<mutex>(cv.mut), [&] { return !cv.ready; });
+		unique_lock<mutex>lk(cv.mut);
+		cv.cv.wait(lk, [&] { return !cv.ready; });
+		
 	}
 
 	thread([] { udpImplementation::lisBroadcast(); }).detach();

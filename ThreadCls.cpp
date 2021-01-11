@@ -2,7 +2,7 @@
 #include <thread>
 extern ServerGame* server;
 extern unsigned int balans;
-extern unsigned __int8 adres[100];
+extern uint8_t adres[100];
 extern map<unsigned int, string> leesclient;
 
 extern char* charPrint(unsigned int x, string& a);
@@ -22,12 +22,12 @@ void TH_FFVOOrtijd(SOCKET* ClientSocket) {
 mainThreadCls::mainThreadCls() {
 	p_TrBC.open();
 	webLisHome.adrs.store(99);
-	for (unsigned __int8 t = 0; t < 100; t++) mpChS[t] = new strMpCh[100 + LEDPL_CNT];
+	for (uint8_t t = 0; t < 100; t++) mpChS[t] = new strMpCh[100 + LEDPL_CNT];
 	strCntS = new strStrCnt[3 + LEDPL_CNT];
 	//Udp
 	(udpImplementation::stringPool = strCntS)->open(100, 0, 32);
-	for (unsigned __int8 t = 0; t < 100; t++) { for (unsigned __int8 tt = 0; tt < 100; tt++) mpChS[t][tt].ad = tt; naChckMpCh[t].ad = t, uitEx[t].set(NULL, 255); }
-	for (unsigned __int8 t = 0; t < 100; t++) adress[t] = 255;
+	for (uint8_t t = 0; t < 100; t++) { for (uint8_t tt = 0; tt < 100; tt++) mpChS[t][tt].ad = tt; naChckMpCh[t].ad = t, uitEx[t].set(NULL, 255); }
+	for (uint8_t t = 0; t < 100; t++) adress[t] = 255;
 	delay = false, accHome = new trLisHomeCls, newSes(), threadCls = this, openLdPl();
 	extCls::begin();
 	thread([] { ((mainThreadCls::deBootStr*)bootPtrAlg)->subF(); server->network->acceptNewClient(); }).detach();
@@ -35,7 +35,7 @@ mainThreadCls::mainThreadCls() {
 
 unsigned int mainThreadCls::strStrCnt::lPosObNoF(char* x, unsigned int l, bool type) {
 	unsigned int uit = strbasprc::cvintcharint(x[l]) * 60 + strbasprc::cvintcharint(x[l + 1]), len = threadCls->strCntS[uit].len; 
-	if (!type) return len; for (unsigned __int8 t = 0; t < 2; t++) x[len - 2 + t] = x[l + t]; return uit;
+	if (!type) return len; for (uint8_t t = 0; t < 2; t++) x[len - 2 + t] = x[l + t]; return uit;
 }
 
 mainThreadCls::trLisHomeCls::trLisHomeCls() {
@@ -46,23 +46,35 @@ mainThreadCls::trLisHomeCls::trLisHomeCls() {
 mutex ffMut;
 
 void mainThreadCls::trLisHomeCls::loop(SOCKET* sock) {
-	socket = *sock; lpStr = ls[(lsAr = !lsAr) * 1]; __int8 clsCntLis = 0; while (true) {
-		if ((iResult = NetworkServices::receiveMessage(socket, lpStr, 1000)) <= 0 || del.load())
+	socket = *sock; lpStr = ls[(lsAr = !lsAr) * 1]; int8_t clsCntLis = 0; while (true) {
+		if (_SOCK_RESULT_COMP((iResult = NetworkServices::receiveMessage(socket, lpStr, 1000))) || del.load())
 		{
 			if (!del.load()) if (clsCntLis++ < 14) continue;
-			else closeF(); unsigned __int8 buf;
+			else closeF(); uint8_t buf;
 			threadCls->sesPDMut.lock(); threadCls->sMutSes.lock(); { if ((buf = adrs.load()) != 255)
-			{ threadCls->sMutAdr.lock(); if (threadCls->adress[buf] == mpSesNo.load()) threadCls->adress[buf] = 255; threadCls->sMutAdr.unlock(); }
+			{
+				threadCls->sMutAdr.lock(); if (threadCls->adress[buf] == mpSesNo.load()) threadCls->adress[buf] = 255; threadCls->sMutAdr.unlock();
+			}
 			else threadCls->voegAdr(mpSesNo.load());
 			} threadCls->ses.erase(mpSesNo.load()); threadCls->sMutSes.unlock(); threadCls->sesPDMut.unlock();
-			cvClose.wait(unique_lock<std::mutex>(muClose), [&] {return closeMut; });
+			{ unique_lock<std::mutex>lk(muClose);  cvClose.wait(lk, [&] {return closeMut; }); }
 			{ strCv* sP = &threadCls->cvAccFull; { unique_lock<mutex> lk2(sP->mut); if (sP->ready) sP->ready = false; } sP->cv.notify_one(); }
-			cvLis.cv.wait(unique_lock<mutex>(cvLis.mut), [&] { return cvLis.ready; });
-			if (exNow == 100) delete[32] mesStr; else exMes->retStr(exNow);
-			Sleep(10000); delete exMes; ffMut.lock(); cout << "Delete: " << (int)buf << '\n'; ffMut.unlock(); delete this; return;
+			{ unique_lock<mutex>lk(cvLis.mut); cvLis.cv.wait(lk, [&] { return cvLis.ready; }); }
+			if (exNow == 100) delete[] mesStr; else exMes->retStr(exNow);
+#ifdef _WIN32
+			Sleep(10000); 
+#endif
+#ifndef _WIN32
+			sleep(10);
+#endif
+			delete exMes; ffMut.lock(); cout << "Delete: " << (int)buf << '\n'; ffMut.unlock(); delete this; return;
 		}
 		if (clsCntLis) clsCntLis = 0;
-	cvLis.cv.wait(unique_lock<mutex>(cvLis.mut), [&] { return cvLis.ready; }), cvLis.ready = false;
+		{
+			unique_lock<mutex>lk(cvLis.mut); 
+			cvLis.cv.wait(lk, [&] { return cvLis.ready; }); 
+			cvLis.ready = false;
+		}
 	thread ([](trLisHomeCls* pTh, char* msg, int len) {
 		pTh->messPr(msg, len); strCv& x = pTh->cvLis;
 		(unique_lock<mutex>(x.mut)), x.ready = true; x.cv.notify_one();
@@ -98,7 +110,7 @@ void mainThreadCls::trLisHomeCls::sendPrep(strSndV s, strMpCh& pMCh) {
 	} }.start(&pMCh, this);
 }
 
-void mainThreadCls::trLisHomeCls::send(strSndV& s, unsigned __int8 ad) {
+void mainThreadCls::trLisHomeCls::send(strSndV& s, uint8_t ad) {
 	mutSend.lock();
 	if (del.load()) { mutSend.unlock(); chSerAgg(s); s.ret(); return; }
 	if (!sendReady) {
@@ -114,7 +126,7 @@ void mainThreadCls::trLisHomeCls::send(strSndV& s, unsigned __int8 ad) {
 
 void mainThreadCls::trLisHomeCls::chSerAgg(strSndV& s) {
 	if (*s.pack != '$') return; char * sP = s.pack; int sL = s.len + 2;
-	unsigned __int8 adrB = sP[sL + 1] / 10 + sP[sL + 2] % 10;
+	uint8_t adrB = sP[sL + 1] / 10 + sP[sL + 2] % 10;
 	switch (sP[sL]) {
 	case 0: chSerAggPl(adrB); break;
 	}
@@ -122,16 +134,16 @@ void mainThreadCls::trLisHomeCls::chSerAgg(strSndV& s) {
 
 void mainThreadCls::strSndV::ret() {
 	if (len < 0) len = (len + 1) * (-1);
-	if (lsNo == 100) { delete[32] pack; }
+	if (lsNo == 100) { delete[] pack; }
 	else if (lsNo >= 0) bron->retStr(lsNo); 
-	else if (lsNo == -101) delete[strStrCnt::lPosObNoF(pack, len, false)] pack; 
+	else if (lsNo == -101) delete[] pack; 
 	else threadCls->strCntS[strStrCnt::lPosObNoF(pack, len, true)].ret(lsNo);
 }
 
 extern mutex ffMut;
 
 void mainThreadCls::trLisHomeCls::sendPr() {
-	(lock_guard<mutex>(muClose)), closeMut = false; __int8 clsCntSnd = 0;
+	(lock_guard<mutex>(muClose)), closeMut = false; int8_t clsCntSnd = 0;
 	while (true) { 
 		bool neg; if (sndSStr.len < 0) neg = true, sndSStr.len = (sndSStr.len + 1) * (-1); else neg = false;
 		//do {
@@ -140,7 +152,7 @@ void mainThreadCls::trLisHomeCls::sendPr() {
 	//		char k[512]; char *kk = sndSStr.pack; for (int t = 0, m = sndSStr.len; t < m; t++) k[t] = kk[t]; k[sndSStr.len] = '\0';
 	//		ffMut.lock(), cout << "Send (" << (int)adrs.load() << "): " << k << '\n', ffMut.unlock();
 	//	} while (false); 
-		if (del.load() || NetworkServices::sendMessage(socket, sndSStr.pack, sndSStr.len) == SOCKET_ERROR) {
+		if (del.load() || _SOCK_ENUM_COMP(NetworkServices::sendMessage(socket, sndSStr.pack, sndSStr.len), SOCKET_ERROR)) {
 			if (!del.load()) if (clsCntSnd++ < 14) continue; else closeF();
 			if (neg) sndSStr.len = sndSStr.len * (-1) - 1; chSerAgg(sndSStr); sndSStr.ret(); mutSend.lock();
 			while (sendVal != sendSet) 
@@ -164,33 +176,33 @@ void mainThreadCls::trLisHomeCls::sendPr() {
 	}
 }
 
-mainThreadCls::strStrCnt& mainThreadCls::strStrCnt::open(__int8 c, unsigned int n, unsigned int l) {
+mainThreadCls::strStrCnt& mainThreadCls::strStrCnt::open(int8_t c, unsigned int n, unsigned int l) {
 	ls = new char[(cnt = lsT = c) * (len = (l += 2))];
-	{ char y[2]; unsigned __int8 yL = strbasprc::cvcharlngth(60, no = n, y); for (unsigned int t = 0; t < c; t++) { char* Y = ls + (l - 2) + l * t; if (yL == 2) *Y = y[0]; else *Y = '0'; Y[1] = y[yL - 1]; } }
-	lsA = new __int8[c]; for (__int8 t = 0, z = c - 1; t < c; t++) lsA[t] = z--; return *this;
+	{ char y[2]; uint8_t yL = strbasprc::cvcharlngth(60, no = n, y); for (unsigned int t = 0; t < c; t++) { char* Y = ls + (l - 2) + l * t; if (yL == 2) *Y = y[0]; else *Y = '0'; Y[1] = y[yL - 1]; } }
+	lsA = new int8_t[c]; for (int8_t t = 0, z = c - 1; t < c; t++) lsA[t] = z--; return *this;
 }
 
-__int8 mainThreadCls::strStrCnt::get(char*& x) {
+int8_t mainThreadCls::strStrCnt::get(char*& x) {
 	{
 		lock_guard<mutex> lk(mut);
-		if (lsT) { __int8 y; x = ls + ((y = lsA[--lsT]) * len); 
+		if (lsT) { int8_t y; x = ls + ((y = lsA[--lsT]) * len); 
 		return -y - 1; }
 	} x = new char[len];
-	{ char y[2]; unsigned __int8 yL = strbasprc::cvcharlngth(60, no, y); char* Y = x + (len - 2); if (yL == 2) *Y = y[0]; else *Y = '0'; Y[1] = y[yL - 1];  }
+	{ char y[2]; uint8_t yL = strbasprc::cvcharlngth(60, no, y); char* Y = x + (len - 2); if (yL == 2) *Y = y[0]; else *Y = '0'; Y[1] = y[yL - 1];  }
 	return -101;
 }
 
-void mainThreadCls::clsExMes::strExec::set(clsExMes* p, __int8 x) {
+void mainThreadCls::clsExMes::strExec::set(clsExMes* p, int8_t x) {
 	if (p) pExMp = &(point = p)->exCls;
 	fileObj.openStr("", fileData); if (x != 255) ls = p->lsP + (lsNow = x) * 32;
 }
 
-void mainThreadCls::clsExMes::exStr::voeg(var& s) {
+void mainThreadCls::clsExMes::exStr::voeg(var s) {
 	mut.lock();
 	if (iT) {
 		com = 0, iT--, threadBufCls::recStruct{ threadCls->threadMut[point->pLisHome->adrs.load()],[](void * p, void* s) {
 	((strExec*)p)->start(); } }.start(
-	   [&](strExec* p) { p->strVarS = s, mut.unlock(); return p; }(&i[([&] {__int8 UU = iNo; iNo = (iNo + 1) % 20; return UU; }())]), NULL);
+	   [&](strExec* p) { p->strVarS = s, mut.unlock(); return p; }(&i[([&] {int8_t UU = iNo; iNo = (iNo + 1) % 20; return UU; }())]), NULL);
 		return;
 	}
 	else if (s.type > 0) 
@@ -213,11 +225,11 @@ void mainThreadCls::clsExMes::strExec::start() {
 	while (pExMp->ret(strVarS, now));
 }
 
-bool mainThreadCls::clsExMes::exStr::ret(var& s, __int8 n) {
+bool mainThreadCls::clsExMes::exStr::ret(var& s, int8_t n) {
 	mut.lock(); 
-	if (s.lsNow == 100) delete[32] s.x;
+	if (s.lsNow == 100) delete[] s.x;
 	else point->retStr(s.lsNow);
-	if (!avail()) { __int8 x; 
+	if (!avail()) { int8_t x; 
 		if ((x = iNo + iT++ - 20) < 0) x += 20; 
 		iA[x] = n; mut.unlock(); cv.notify_one(); 
 		return false; 

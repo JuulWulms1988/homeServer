@@ -1,15 +1,14 @@
 #pragma once
-#include <winsock2.h>
-#include <Windows.h>
-#include "NetworkServices.h"
+
+#ifdef _WIN32
 #include <ws2tcpip.h>
-#include <map>
-#include <string>
-using namespace std; 
 #pragma comment (lib, "Ws2_32.lib")
+#endif
+#include "NetworkServices.h"
+#include <map>
+#include "Custom/custom_string.h"
 
-
-
+using namespace std; 
 
 class ServerintNetwork
 {
@@ -18,9 +17,9 @@ public:
     ~ServerintNetwork(void);
 
 	// send data to all clients
-    void sendTo(const unsigned int* id, char * bericht, unsigned int* len);
+   
 	// receive incoming data
-    int receiveData(const unsigned int * client_id, char * recvbuf);
+    
 	void leegmap(const unsigned int *id);
 	void maakmap(const unsigned int *id);
 	// accept new connections

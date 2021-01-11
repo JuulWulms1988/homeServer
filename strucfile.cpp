@@ -2,18 +2,18 @@
 
 using namespace std;
 
-void strucfile::fopen(char * demap, unsigned __int8 * demaplength, char * defile, unsigned __int8 * defilelength) {
+void strucfile::fopen(const char * demap, uint8_t * demaplength, const char * defile, uint8_t * defilelength) {
 	char stfile[64] = { "" };
-	__int8 stfilelen = 0;
+	int8_t stfilelen = 0;
 	if (*demaplength > 0) {
 		strncpy_s(&stfile[stfilelen], *demaplength + 1, demap, *demaplength);
-		stfilelen = stfilelen + *demaplength; stfile[stfilelen++] = '\\';
+		stfilelen = stfilelen + *demaplength; stfile[stfilelen++] = '/';
 	}
 	strncpy_s(&stfile[stfilelen], *defilelength + 1, defile, *defilelength); stfilelen = stfilelen + *defilelength;
 	stfile[stfilelen++] = '\0';
 	open(stfile); 
 }
-void strucfile::beginregel(char * demap, unsigned __int8* demaplength, char * defile, unsigned __int8* defilelength) {
+void strucfile::beginregel(const char * demap, uint8_t* demaplength, const char * defile, uint8_t* defilelength) {
 	fopen(demap, demaplength, defile, defilelength);
 }
 void strucfile::open(char * defile) {
@@ -57,9 +57,9 @@ unsigned int strucfile::lsdergllength(char * deregel, unsigned int *regelno) {
 	return bas.charPLen(bas.charPLsDR(*regelno, deregel, lsFile.file, lsFile.loc));
 }
 
-unsigned int strucfile::stwebfile(char * demap, unsigned __int8 * demaplength, char * defile, unsigned __int8 * defilelength, char * stuur, char* voeging, unsigned __int8 voeginglen) {
+unsigned int strucfile::stwebfile(const char * demap, uint8_t * demaplength, const char * defile, uint8_t * defilelength, char * stuur, char* voeging, uint8_t voeginglen) {
 	unsigned int uitkomst = 0;
-	unsigned __int8 idtel = 0;
+	uint8_t idtel = 0;
 	char thischar = '~';
 	fopen(demap, demaplength, defile, defilelength);
 	//cout << demap << "\nLen: " << *demaplength << defile << "\nLen: " << *defilelength << "\n\n";

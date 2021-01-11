@@ -1,4 +1,7 @@
-#include "StdAfx.h"
+#ifdef _WIN32
+#include "../stdafx.h"
+#endif
+
 #include "ServerGame.h"
 #include "Servernetwork.h"
 #include <fstream>
@@ -16,7 +19,7 @@ extern statvars* p_statvars;
 //WEBWEB
 bool delayGelezen = false;
 int aantbufferclient;
-unsigned __int8 bufferclient[100];
+uint8_t bufferclient[100];
 bool lezen[500];
 bool adresls[500];
 bool statverzlees[500];
@@ -25,7 +28,7 @@ char lees2[32];
 int lees2length = 0;
 int leeslength = 0;
 int leestel[150];
-unsigned __int8 adres[100];
+uint8_t adres[100];
 unsigned int toevoegenid;
 bool adresvervangen;
 void tijdadresproc();
@@ -41,7 +44,7 @@ int leesbestandlength;
 char leesbestand[32];
 unsigned int ServerGame::client_id; 
 bool statusvar[900];
-unsigned __int8 statusdimvar[900];
+uint8_t statusdimvar[900];
 bool zendallen; 
 unsigned int zendid;
 char stuurlees[32];
@@ -54,14 +57,14 @@ char leesfiletxt[64]; int leesfiletxtlength;
 bool webgestuurd;
 char stuurweb[32];
 //unsigned int stuurweblength;
- __int8 watuitvoeren = 0;
- __int8 watuitvoerenr = 0;
+ int8_t watuitvoeren = 0;
+ int8_t watuitvoerenr = 0;
   
  unsigned int gavervadr;
 
  char recvBuff[1000];
 
- unsigned __int8 dedimwaarde;
+ uint8_t dedimwaarde;
 
  
 
@@ -84,7 +87,7 @@ ServerGame::~ServerGame(void)
 {
 }
 
-void ServerGame::update(char* network_data, unsigned int data_length, unsigned __int8 mpNo, unsigned __int8& adrs)
+void ServerGame::update(char* network_data, unsigned int data_length, uint8_t mpNo, uint8_t& adrs)
 {
 	
 }
@@ -160,12 +163,12 @@ void stuurbericht()
 
 }
 
-extern unsigned __int8* LEDPL_ADR; extern unsigned __int8* LEDPL_StripCnt;
-extern unsigned __int8 LEDPL_CNT;
+extern uint8_t* LEDPL_ADR; extern uint8_t* LEDPL_StripCnt;
+extern uint8_t LEDPL_CNT;
 
 void tijdadresproc() {
 //	char thisBestand = '~';
-//	__int8 tels = 0;
+//	int8_t tels = 0;
 	memFileObj lsFile(fileData);
 	leesbestandmap[0] = 'O'; leesbestandmap[1] = 'v'; leesbestandmap[2] = 'e'; leesbestandmap[3] = 'r'; leesbestandmap[4] = 'i'; leesbestandmap[5] = 'g'; leesbestandmap[6] = 'e'; leesbestandmaplength = 7; leesbestandtxt[0] = 'T'; leesbestandtxt[1] = 'i'; leesbestandtxt[2] = 'j'; leesbestandtxt[3] = 'd'; leesbestandtxt[4] = 'a'; leesbestandtxt[5] = 'd'; leesbestandtxt[6] = 'r'; leesbestandtxt[7] = 'e'; leesbestandtxt[8] = 's'; leesbestandtxtlength = 9;
 	//zetleesbestandtxtproc();
@@ -178,7 +181,7 @@ void tijdadresproc() {
 		}
 	leesbestand[leesbestandlength] = '\0';
 	while (leesbestand[0] != 'G' || leesbestand[1] != 'G') {
-		tijdadres.insert(pair<__int8, __int8>(tels++, (leesbestand[0] - '0') * 10 + (leesbestand[1] - '0')));
+		tijdadres.insert(pair<int8_t, int8_t>(tels++, (leesbestand[0] - '0') * 10 + (leesbestand[1] - '0')));
 		leesbestandlength = 0;
 		leesbestand[0] = '1'; leesbestand[1] = '1';
 		thisBestand = lsFile.get();
@@ -190,7 +193,7 @@ void tijdadresproc() {
 	}	
 	*/
 	strncpy_s(leesbestandtxt, 8, "LedPlaf", leesbestandtxtlength = 7); zetleesbestandtxtproc(); lsFile.open(leesfiletxt + 5);
-	char* fl_ = lsFile.file; unsigned long & sk_ = lsFile.loc; LEDPL_ADR = new unsigned __int8[LEDPL_CNT = strbasprc::cvintcharStr(strbasprc::charPLsR(leesbestandtxt, fl_, sk_))]; LEDPL_StripCnt = new unsigned __int8[LEDPL_CNT]; unsigned __int8 tt = 0; 
+	char* fl_ = lsFile.file; unsigned long & sk_ = lsFile.loc; LEDPL_ADR = new uint8_t[LEDPL_CNT = strbasprc::cvintcharStr(strbasprc::charPLsR(leesbestandtxt, fl_, sk_))]; LEDPL_StripCnt = new uint8_t[LEDPL_CNT]; uint8_t tt = 0; 
 	while (*strbasprc::charPLsR(leesbestandtxt, fl_, sk_)) LEDPL_ADR[tt] = strbasprc::cvintcharint(*leesbestandtxt), LEDPL_StripCnt[tt++] = strbasprc::cvintcharint(leesbestandtxt[1]);
 		leesbestandtxtlength = 0; leesbestandlength = 0;
 }
@@ -211,7 +214,7 @@ void zetleesbestandtxtproc() {
 		for (int tel = 0; tel < leesbestandmaplength; tel++) {
 			leesfiletxt[tel] = leesbestandmap[tel];
 		}
-		leesfiletxt[leesbestandmaplength] = '\\';
+		leesfiletxt[leesbestandmaplength] = '/';
 	}
 
 
@@ -225,7 +228,7 @@ void zetleesbestandtxtproc() {
 	leesfiletxt[1] = 'a';
 	leesfiletxt[2] = 't';
 	leesfiletxt[3] = 'a';
-	leesfiletxt[4] = '\\';
+	leesfiletxt[4] = '/';
 
 	leesfiletxt[leesfiletxtlength++] = '.';
 	leesfiletxt[leesfiletxtlength++] = 't';

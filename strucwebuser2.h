@@ -1,7 +1,9 @@
 #pragma once
+#include <stdint.h>
 #include <map>
 #include <shared_mutex>
 #include <iostream>
+#include "Custom/custom_string.h"
 
 using namespace std;
 #define WEBUSR_CNT 2
@@ -14,26 +16,26 @@ public:
 	unsigned int voegid(unsigned int usrno);
 	bool getId(unsigned int id, unsigned int& logId, bool& wId);
 	mutex mut;
-	void mpupdate(unsigned __int8 minuut);
+	void mpupdate(uint8_t minuut);
 	struct clswbusrlogstr {
 		char* usr;
-		unsigned __int8* usrlen;
+		uint8_t* usrlen;
 		char* psw;
-		unsigned __int8* pswlen;
+		uint8_t* pswlen;
 	};
 	struct strloghost {
 		const unsigned int usrno;
-		unsigned __int8 tijd[4];
+		uint8_t tijd[4];
 	};
 	map<unsigned int, clswbusrlogstr*> mpusr;
 	map<unsigned int, strloghost> mphost;
 
 	struct userIdStr {
 		unsigned int id[WEBUSR_CNT][2];
-		unsigned __int8 tijd[WEBUSR_CNT][2];
+		uint8_t tijd[WEBUSR_CNT][2];
 		unsigned int newIdF();
 	} usrId;
 private:
-	bool vergminuut(bool z, unsigned __int8 x, unsigned __int8 y);
+	bool vergminuut(bool z, uint8_t x, uint8_t y);
 	
 };

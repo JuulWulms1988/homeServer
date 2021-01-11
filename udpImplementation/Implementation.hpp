@@ -1,12 +1,12 @@
 #pragma once
-#include "..\\ThreadCls.h"
+#include "../ThreadCls.h"
 
 namespace udpImplementation {
 	extern void send(char* buf, int len);
 	extern unsigned int receive(char* buffer, unsigned int length);
 	extern mainThreadCls::strStrCnt* stringPool;
 
-	inline void sendPrep(mainThreadCls::strSndV& s) {
+	inline void sendPrep(mainThreadCls::strSndV s) {
 		static std::mutex threadMut;
 		static mainThreadCls::strMpCh mpCh;
 		if (!mpCh.begin(s)) return;
@@ -20,13 +20,13 @@ namespace udpImplementation {
 	}
 
 	inline void lisBroadcast() {
-		mainThreadCls::strSndV s;
+		char* x, lsN; int l;
 		for (;;) {
-			s.lsNo = stringPool->get(s.pack);
+			lsN = stringPool->get(x);
 			//packet must be 0 terminated
-			while (s.pack[s.len = receive(s.pack, 32)]);
-			stringPool->lPosF(s.pack, s.len);
-			sendPrep(s);
+			while (x[l = receive(x, 32)]);
+			stringPool->lPosF(x, l);
+			sendPrep(mainThreadCls::strSndV{x, l, NULL, lsN});
 		}
 	}
 }
