@@ -168,7 +168,7 @@ void mainThreadCls::trLisHomeCls::messPr(char* mes, unsigned int len)
 }
 
 void mainThreadCls::tijdProc() {
-	thread([] {(new exMesOne)->tijdPr(); }).detach();
+	(new exMesOne)->tijdPr();
 }
 
 void mainThreadCls::clsExMes::strExec::main() {

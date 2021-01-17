@@ -3,7 +3,7 @@
 #endif
 
 #include "ServerGame.h"
-#include "Servernetwork.h"
+#include "ServerNetwork.h"
 #include <fstream>
 #include <iostream>
 #include "strucwebuser.h"

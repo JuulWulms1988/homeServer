@@ -1,6 +1,6 @@
 #pragma once
 #include "Serverintnetwork.h"
-#include "threadCls.h"
+#include "ThreadCls.h"
 #include "strucwebuser2.h"
 #define SENDLEN_INT 100000
 #define GETLEN_INT 1024

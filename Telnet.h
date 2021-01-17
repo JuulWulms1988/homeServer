@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ServerTelnet.h"
-#include "threadCls.h"
+#include "ThreadCls.h"
 
 struct telnetStr;
 

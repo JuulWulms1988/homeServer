@@ -8,22 +8,53 @@ static inline void delHibF() {
 #endif
 
 #ifndef _WIN32
-	char p[]{ 'r', 'm', ' ', 'h', 'i', 'b', 'e', 'r', '/', 'h', 'i', 'b', 'e', 'r', '.', 't', 'x', 't', '\0' };
+	char p[]{ 'r', 'm', ' ', '/', 'h', 'o', 'm', 'e', '/', 'p', 'i', '/', 's', 'h', 'a', 'r', 'e', '/', 'h', 'i', 'b', 'e', 'r', '/', 'h', 'i', 'b', 'e', 'r', '.', 't', 'x', 't', '\0' };
 #endif
 	system(p);
 }
 
 static inline void openHibF(ifstream* hF, ofstream* hF2) {
+#ifdef _WIN32
 	char p[]{ 'h', 'i', 'b', 'e', 'r', '/', 'h', 'i', 'b', 'e', 'r', '.', 't', 'x', 't', '\0' };
+#endif
+
+#ifndef _WIN32
+
+	char p[]{ '/', 'h', 'o', 'm', 'e', '/', 'p', 'i', '/', 's', 'h', 'a', 'r', 'e', '/', 'h', 'i', 'b', 'e', 'r', '/', 'h', 'i', 'b', 'e', 'r', '.', 't', 'x', 't', '\0' };
+#endif
+	
 	if (hF) hF->open(p);
 	else hF2->open(p);
 }
 
+#ifndef _WIN32
+
+static inline void mountHib() {
+	char p[]{ '/', 'h', 'o', 'm', 'e', '/', 'p', 'i', '/', 'S', 'e', 'r', 'v', 'e', 'r', '/', 'm', 'H', 'i', 'b', '.', 's', 'h', '\0' };
+	system(p);
+}
+
+static inline void umountHib() {
+	char p[]{ '/', 'h', 'o', 'm', 'e', '/', 'p', 'i', '/', 'S', 'e', 'r', 'v', 'e', 'r', '/', 'u', 'H', 'i', 'b', '.', 's', 'h', '\0' };
+	system(p);
+}
+
+#endif 
 
 
 void extCls::begin() {
 	do {
-		ifstream hF; openHibF(&hF, NULL); if (!hF.is_open()) return;
+#ifndef WIN32_
+		mountHib();
+#endif
+
+		ifstream hF; openHibF(&hF, NULL); if (!hF.is_open()) {
+#ifndef WIN32_
+			umountHib();
+#endif
+			
+			return;
+		}
 		hF.seekg(-2, ios::end);
 		{
 			bool flag = false;
@@ -75,11 +106,17 @@ void extCls::begin() {
 		hF.close();
 	} while (false); 
 	delHibF();
+#ifndef WIN32_
+	umountHib();
+#endif
 }
 
 
 
 void extCls::end() {
+#ifndef WIN32_
+	mountHib();
+#endif
 	do {
 		ifstream hF; openHibF(&hF, NULL); if (!hF.is_open()) break;
 		hF.close();
@@ -87,6 +124,13 @@ void extCls::end() {
 	} while (false);
 	ofstream hF;
 	openHibF(NULL, &hF);
+	if (!hF.is_open()) {
+#ifndef WIN32_
+		umountHib();
+#endif
+
+		return;
+	}
 	{
 		char w[3] = { 'g', '\n', '\0' };
 		atomic<bool>* p = threadCls->statVar;
@@ -135,4 +179,7 @@ void extCls::end() {
 	}
 	hF << 'z' << 'z';
 	hF.close();
+#ifndef WIN32_
+	umountHib();
+#endif
 }

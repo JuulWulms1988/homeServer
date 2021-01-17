@@ -1,7 +1,7 @@
 #ifdef _WIN32
 #include "../stdafx.h"
 #endif
-#include "ServerintNetwork.h"
+#include "Serverintnetwork.h"
 #include <iostream>
 
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "memFile.h"
+#include "MemFile.h"
 #include <iostream>
 
 using namespace std;

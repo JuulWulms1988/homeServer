@@ -84,7 +84,14 @@ bool piScreenCls::wakeOnLanF() {
 
 void mainThreadCls::clsExMes::strExec::piScreenF() {
 	if (str[4] == 'A' && str[5] == 'N') {
+#ifndef  _WIN32
+		system("sudo etherwake -i eth0 -b 192.168.180.255 00:1b:38:d5:4f:0d");
+#endif // ! _WIN32
+
+		
+#ifdef _WIN32
 		system("wolcmd 001b38d54f0d 192.168.180.30 255.255.255.0");
+#endif
 		if (!piScreenC.wakeOnLanF()) return;
 		uint8_t ad = point->pLisHome->adrs.load();
 		if (ad == 255) return;
