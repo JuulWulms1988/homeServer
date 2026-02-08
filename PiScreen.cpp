@@ -39,8 +39,8 @@ void piScreenCls::chanF(uint16_t no, uint8_t ad) {
 		else if ((chanBl = true) && (no < 256 || (channel = 0))) channel = no;
 		unsigned long h = 0;
 		sourceLen = strbasprc::charPLen(strbasprc::charPLsDR(channel * 2, source, chanPoint, h));
-		if (!play) playPrep(2 + (play = !(Niet = false)) * 1, ad), passPrep(512, passPrMpCha[101], 101);
-	} if (Niet) passPrep(0, passPrMpCha[ad], ad);
+		if (!play) play = !(Niet = false);
+	} if (Niet) passPrep(0, passPrMpCha[ad], ad); else playPrep(3, ad),	passPrep(512, passPrMpCha[101], 101);
 }
 
 bool piScreenCls::StreamVidVar(char* x) {
